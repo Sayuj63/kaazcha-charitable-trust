@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+*.local
+
+# Vite / editor caches
+.vite/
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+
+# Convex
+.convex/
+
+# Logs
+*.log
+npm-debug.log*

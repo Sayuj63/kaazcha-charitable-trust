@@ -1,1 +1,268 @@
-[FILE_TOO_LARGE]: The combined read_files output exceeded the 100,000 character hard limit. This file was truncated after 0 characters. Read it separately or use code_search for the relevant section.
+/* DO NOT CHANGE */
+@import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+
+/* DO NOT CHANGE */
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Kaazcha heritage palette */
+  --color-cream: var(--cream);
+  --color-ivory: var(--ivory);
+  --color-sand: var(--sand);
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-light: var(--terracotta-light);
+  --color-maroon: var(--maroon);
+  --color-deep: var(--deep);
+  --color-forest: var(--forest);
+  --color-forest-deep: var(--forest-deep);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-ink: var(--ink);
+}
+
+/* CHANGE VALUES FOR THEME — Kaazcha Charitable Trust */
+:root {
+  --radius: 0px;
+
+  --cream: #faf2e3;
+  --ivory: #fff9ec;
+  --sand: #efe2c6;
+  --terracotta: #b4502a;
+  --terracotta-light: #d97a47;
+  --maroon: #6e2323;
+  --deep: #33110f;
+  --forest: #2e4b38;
+  --forest-deep: #1e3326;
+  --gold: #b9821f;
+  --gold-light: #e0b44e;
+  --ink: #201510;
+
+  --background: #faf2e3;
+  --foreground: #241711;
+  --card: #fff9ec;
+  --card-foreground: #241711;
+  --popover: #fff9ec;
+  --popover-foreground: #241711;
+  --primary: #6e2323;
+  --primary-foreground: #faf2e3;
+  --secondary: #efe2c6;
+  --secondary-foreground: #241711;
+  --muted: #f0e3c8;
+  --muted-foreground: #6b5842;
+  --accent: #e8d6ae;
+  --accent-foreground: #241711;
+  --destructive: #a33b2e;
+  --border: #201510;
+  --input: #201510;
+  --ring: #b9821f;
+  --chart-1: #b4502a;
+  --chart-2: #6e2323;
+  --chart-3: #2e4b38;
+  --chart-4: #b9821f;
+  --chart-5: #efe2c6;
+  --sidebar: #fff9ec;
+  --sidebar-foreground: #241711;
+  --sidebar-primary: #6e2323;
+  --sidebar-primary-foreground: #faf2e3;
+  --sidebar-accent: #efe2c6;
+  --sidebar-accent-foreground: #241711;
+  --sidebar-border: #201510;
+  --sidebar-ring: #b9821f;
+}
+
+.dark {
+  --background: #241511;
+  --foreground: #f3e8d2;
+  --card: #2e1c15;
+  --card-foreground: #f3e8d2;
+  --popover: #2e1c15;
+  --popover-foreground: #f3e8d2;
+  --primary: #d9ae4e;
+  --primary-foreground: #241511;
+  --secondary: #3a241c;
+  --secondary-foreground: #f3e8d2;
+  --muted: #3a241c;
+  --muted-foreground: #cbb99b;
+  --accent: #3a241c;
+  --accent-foreground: #f3e8d2;
+  --destructive: #c05a47;
+  --border: rgb(243 232 210 / 16%);
+  --input: rgb(243 232 210 / 24%);
+  --ring: #d9ae4e;
+  --sidebar: #2e1c15;
+  --sidebar-foreground: #f3e8d2;
+  --sidebar-primary: #d9ae4e;
+  --sidebar-primary-foreground: #241511;
+  --sidebar-accent: #3a241c;
+  --sidebar-accent-foreground: #f3e8d2;
+  --sidebar-border: rgb(243 232 210 / 16%);
+  --sidebar-ring: #d9ae4e;
+}
+
+/* Typography & motion tokens */
+@theme {
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --animate-marquee: marquee 52s linear infinite;
+  --animate-marquee-slow: marquee 78s linear infinite;
+  --animate-kenburns: kenburns 30s ease-in-out infinite alternate;
+  --animate-flame: flame 1.6s ease-in-out infinite;
+  --animate-drift: drift 22s ease-in-out infinite alternate;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes kenburns {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.12);
+    }
+  }
+  @keyframes flame {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.85;
+    }
+    50% {
+      transform: scale(1.12);
+      opacity: 1;
+    }
+  }
+  @keyframes drift {
+    from {
+      transform: scale(1) translateX(0);
+    }
+    to {
+      transform: scale(1.08) translateX(-1.5%);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-kerning: normal;
+  }
+  section[id] {
+    scroll-margin-top: 84px;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-optical-sizing: auto;
+  }
+  ::selection {
+    background: var(--gold);
+    color: var(--ink);
+  }
+}
+
+/* Neobrutalist hard shadows — flat color blocks, strong black borders */
+@layer utilities {
+  .shadow-brutal {
+    box-shadow: 5px 5px 0 0 var(--ink);
+  }
+  .shadow-brutal-sm {
+    box-shadow: 3px 3px 0 0 var(--ink);
+  }
+  .shadow-brutal-lg {
+    box-shadow: 9px 9px 0 0 var(--ink);
+  }
+  .shadow-brutal-gold {
+    box-shadow: 5px 5px 0 0 var(--gold);
+  }
+  .shadow-brutal-cream {
+    box-shadow: 5px 5px 0 0 var(--cream);
+  }
+  /* soft grain so nothing feels flat or sterile */
+  .grain-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+  .paper {
+    background-image: radial-gradient(
+        circle at 18% 12%,
+        rgb(255 249 236 / 0.9),
+        transparent 42%
+      ),
+      radial-gradient(circle at 85% 90%, rgb(239 226 198 / 0.75), transparent 46%);
+  }
+  /* gold underline that draws itself on hover */
+  .underline-draw {
+    position: relative;
+  }
+  .underline-draw::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .underline-draw:hover::after,
+  .underline-draw:focus-visible::after {
+    transform: scaleX(1);
+  }
+  .text-shadow-hero {
+    text-shadow: 0 2px 30px rgb(20 8 6 / 0.45);
+  }
+}
