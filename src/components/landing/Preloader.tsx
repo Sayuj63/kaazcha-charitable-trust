@@ -28,9 +28,11 @@ export function Preloader({ onDone }: { onDone: () => void }) {
         <motion.div
           exit={{ y: "-100%" }}
           transition={{ duration: 0.95, ease: EASE }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-deep text-cream"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-white text-cream sm:bg-deep"
         >
-          <div className="grain-overlay" />
+          <div className="hidden sm:block">
+            <div className="grain-overlay" />
+          </div>
           <video
             ref={videoRef}
             src="/kcc-intro.mp4"
@@ -39,7 +41,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
             playsInline
             preload="auto"
             onEnded={handleEnded}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-contain sm:object-cover"
           />
         </motion.div>
       )}
