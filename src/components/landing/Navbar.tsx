@@ -70,26 +70,17 @@ export function Navbar() {
         >
           <span
             className={cn(
-              "flex size-10 items-center justify-center border-2 font-display text-xl transition-all duration-300 group-hover:bg-terracotta",
+              "flex h-14 items-center justify-center overflow-hidden border-2 bg-cream transition-all duration-300",
               dark
-                ? "border-cream bg-maroon text-gold-light shadow-brutal-cream"
-                : "border-ink bg-terracotta text-cream shadow-brutal-sm",
+                ? "border-cream shadow-brutal-cream"
+                : "border-ink shadow-brutal-sm",
             )}
           >
-            ക
-          </span>
-          <span className="flex flex-col leading-none">
-            <span className="font-display text-xl font-medium tracking-tight">
-              Kaazcha
-            </span>
-            <span
-              className={cn(
-                "mt-0.5 text-[9px] font-semibold tracking-[0.3em] uppercase",
-                dark ? "text-gold-light" : "text-gold",
-              )}
-            >
-              Charitable Trust
-            </span>
+            <img
+              src="/kcc-logo.jpeg"
+              alt="Kaazcha Charitable Trust logo"
+              className="h-full w-auto object-contain"
+            />
           </span>
         </a>
 

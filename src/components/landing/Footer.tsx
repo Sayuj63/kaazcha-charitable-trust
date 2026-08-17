@@ -22,8 +22,12 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <a href="#home" className="flex items-center gap-3">
-              <span className="flex size-11 items-center justify-center border-2 border-cream bg-maroon font-display text-2xl text-gold-light shadow-brutal-cream">
-                ക
+              <span className="flex size-11 items-center justify-center overflow-hidden border-2 border-cream bg-maroon shadow-brutal-cream">
+                <img
+                  src="/kcc-logo.jpeg"
+                  alt="Kaazcha Charitable Trust logo"
+                  className="h-full w-full object-cover"
+                />
               </span>
               <span className="flex flex-col leading-none">
                 <span className="font-display text-2xl font-medium tracking-tight">
