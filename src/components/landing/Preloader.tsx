@@ -39,7 +39,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
             playsInline
             preload="auto"
             onEnded={handleEnded}
-            className="h-full w-full object-contain"
+            className="absolute inset-0 h-full w-full object-cover"
           />
         </motion.div>
       )}
