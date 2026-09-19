@@ -315,47 +315,6 @@ export function Contact() {
             </form>
           </Reveal>
         </div>
-
-        {/* ——— Have an Idea? closing band ——— */}
-        <Reveal className="mt-20">
-          <div className="relative overflow-hidden border-2 border-ink bg-deep px-6 py-14 text-center shadow-brutal-lg sm:px-12 sm:py-20">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(185,130,31,0.18)_0%,transparent_65%)]" aria-hidden />
-            <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-transparent via-gold to-transparent" aria-hidden />
-            <Eyebrow className="relative text-center text-gold-light">
-              Have an Idea?
-            </Eyebrow>
-            <motion.p
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-70px" }}
-              transition={{ duration: 0.9, delay: 0.1, ease: EASE }}
-              className="relative mx-auto mt-6 max-w-3xl font-display text-2xl leading-snug font-light text-cream italic sm:text-4xl"
-            >
-              Kaazcha believes that meaningful initiatives often begin with a
-              conversation.
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-70px" }}
-              transition={{ duration: 0.8, delay: 0.24, ease: EASE }}
-              className="relative mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-cream/75 sm:text-base"
-            >
-              If you have an idea, story, cultural project, research proposal,
-              collaboration opportunity or community initiative that you
-              believe aligns with our vision, get in touch.
-            </motion.p>
-            <motion.h3
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-70px" }}
-              transition={{ duration: 0.9, delay: 0.36, ease: EASE }}
-              className="relative mt-9 font-display text-3xl leading-tight font-medium text-gold-light text-balance sm:text-5xl"
-            >
-              Let&apos;s create something meaningful together.
-            </motion.h3>
-          </div>
-        </Reveal>
       </div>
     </section>
   );

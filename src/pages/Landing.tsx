@@ -7,7 +7,6 @@ import { Heritage } from "@/components/landing/Heritage";
 import { Hero } from "@/components/landing/Hero";
 import { Highlights } from "@/components/landing/Highlights";
 import { Initiatives } from "@/components/landing/Initiatives";
-import { Invitation } from "@/components/landing/Invitation";
 import { Navbar } from "@/components/landing/Navbar";
 import { NewsMedia } from "@/components/landing/NewsMedia";
 import { Preloader } from "@/components/landing/Preloader";
@@ -27,7 +26,6 @@ export default function Landing() {
         <Initiatives />
         <Heritage />
         <NewsMedia />
-        <Invitation />
         <Contact />
       </main>
       <Footer />
