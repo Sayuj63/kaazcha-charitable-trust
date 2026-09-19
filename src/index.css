@@ -60,9 +60,9 @@
 :root {
   --radius: 0px;
 
-  --cream: #faf2e3;
-  --ivory: #fff9ec;
-  --sand: #efe2c6;
+  --cream: #ffffff;
+  --ivory: #ffffff;
+  --sand: #ffffff;
   --terracotta: #b4502a;
   --terracotta-light: #d97a47;
   --maroon: #6e2323;
@@ -73,15 +73,15 @@
   --gold-light: #e0b44e;
   --ink: #201510;
 
-  --background: #faf2e3;
+  --background: #ffffff;
   --foreground: #241711;
-  --card: #fff9ec;
+  --card: #ffffff;
   --card-foreground: #241711;
-  --popover: #fff9ec;
+  --popover: #ffffff;
   --popover-foreground: #241711;
   --primary: #6e2323;
-  --primary-foreground: #faf2e3;
-  --secondary: #efe2c6;
+  --primary-foreground: #ffffff;
+  --secondary: #ffffff;
   --secondary-foreground: #241711;
   --muted: #f0e3c8;
   --muted-foreground: #6b5842;
@@ -191,7 +191,7 @@
     font-kerning: normal;
   }
   section[id] {
-    scroll-margin-top: 84px;
+    scroll-margin-top: 124px;
   }
   h1,
   h2,
@@ -235,12 +235,7 @@
     background-size: 160px 160px;
   }
   .paper {
-    background-image: radial-gradient(
-        circle at 18% 12%,
-        rgb(255 249 236 / 0.9),
-        transparent 42%
-      ),
-      radial-gradient(circle at 85% 90%, rgb(239 226 198 / 0.75), transparent 46%);
+    background-image: none;
   }
   /* gold underline that draws itself on hover */
   .underline-draw {

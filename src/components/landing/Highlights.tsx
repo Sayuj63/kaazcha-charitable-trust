@@ -1,25 +1,32 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BookOpen, Landmark, Newspaper, Users } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-import { IMAGES, Reveal, SectionHeader, SmartImage } from "./shared";
+import { Reveal, SectionHeader } from "./shared";
 
-const CARDS = [
+type Card = {
+  num: string;
+  title: string;
+  teaser: string;
+  href: string;
+  Icon: LucideIcon;
+};
+
+const CARDS: Card[] = [
   {
     num: "01",
     title: "Our Initiatives",
     teaser:
       "Discover the programmes and initiatives through which Kaazcha works towards social, cultural and educational enrichment.",
-    href: "#initiatives",
-    img: IMAGES.highlightInitiatives,
-    alt: "Heritage architecture against a warm sky",
+    href: "#blessy",
+    Icon: BookOpen,
   },
   {
     num: "02",
     title: "Culture & Heritage",
     teaser:
       "Explore stories, traditions, people, places and histories that have shaped our cultural identity.",
-    href: "#heritage",
-    img: IMAGES.highlightCulture,
-    alt: "Evening lamp-lit ceremony on a riverside ghat",
+    href: "#blessy",
+    Icon: Landmark,
   },
   {
     num: "03",
@@ -27,8 +34,7 @@ const CARDS = [
     teaser:
       "Stay connected with our latest events, programmes, stories and activities.",
     href: "#news",
-    img: IMAGES.highlightNews,
-    alt: "Golden temple glowing at dusk",
+    Icon: Newspaper,
   },
   {
     num: "04",
@@ -36,8 +42,7 @@ const CARDS = [
     teaser:
       "Join us in preserving the past, engaging with the present and creating possibilities for future generations.",
     href: "#contact",
-    img: IMAGES.highlightPart,
-    alt: "A houseboat drifting through Kerala backwaters",
+    Icon: Users,
   },
 ];
 
@@ -54,37 +59,64 @@ export function Highlights() {
           }
           description="Kaazcha is not a museum with glass cases. It is a working trust — gathering, teaching, documenting and celebrating the heritage of Keralam, every single day."
         />
+      </div>
 
-        <div className="mt-16 grid gap-7 sm:grid-cols-2 xl:grid-cols-4">
+      {/* Mobile: horizontal scroll rail. Desktop: 4-up grid. */}
+      <div className="mt-14 sm:mt-16">
+        <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-5 px-5 pb-6 sm:hidden">
+          {CARDS.map((card) => (
+            <a
+              key={card.num}
+              href={card.href}
+              className="group flex w-[78%] min-w-[260px] shrink-0 snap-start flex-col border-2 border-ink bg-card p-6 shadow-brutal-sm transition-all duration-400 hover:-translate-y-1.5 hover:border-gold hover:shadow-brutal"
+            >
+              <div className="flex items-center justify-between">
+                <span className="flex size-14 items-center justify-center border-2 border-ink bg-maroon text-cream shadow-brutal-sm transition-colors duration-300 group-hover:bg-gold group-hover:text-ink">
+                  <card.Icon className="size-6" />
+                </span>
+                <span className="font-display text-3xl italic text-gold">
+                  .{card.num}
+                </span>
+              </div>
+              <h3 className="mt-6 font-display text-2xl font-medium tracking-tight text-ink">
+                {card.title}
+              </h3>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/65">
+                {card.teaser}
+              </p>
+              <span className="mt-5 inline-flex items-center gap-2 font-sans text-[11px] font-bold tracking-[0.22em] text-maroon uppercase">
+                <span className="underline-draw">Explore</span>
+                <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+              </span>
+            </a>
+          ))}
+        </div>
+
+        <div className="mx-auto hidden max-w-7xl gap-7 px-5 sm:grid sm:grid-cols-2 sm:px-8 xl:grid-cols-4">
           {CARDS.map((card, i) => (
             <Reveal key={card.num} delay={i * 0.12} className="h-full">
               <a
                 href={card.href}
-                className="group block h-full border-2 border-ink bg-card shadow-brutal-sm transition-all duration-400 hover:-translate-y-1.5 hover:border-gold hover:shadow-brutal-lg"
+                className="group flex h-full flex-col border-2 border-ink bg-card p-7 shadow-brutal-sm transition-all duration-400 hover:-translate-y-1.5 hover:border-gold hover:shadow-brutal-lg"
               >
-                <div className="relative aspect-[4/3] overflow-hidden border-b-2 border-ink">
-                  <SmartImage
-                    src={card.img}
-                    alt={card.alt}
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-deep/50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <span className="absolute top-3 left-3 border-2 border-ink bg-cream px-2.5 py-1 font-display text-sm italic text-maroon shadow-brutal-sm transition-colors duration-300 group-hover:bg-gold-light">
+                <div className="flex items-center justify-between">
+                  <span className="flex size-14 items-center justify-center border-2 border-ink bg-maroon text-cream shadow-brutal-sm transition-colors duration-300 group-hover:bg-gold group-hover:text-ink">
+                    <card.Icon className="size-6" />
+                  </span>
+                  <span className="font-display text-4xl italic text-gold">
                     .{card.num}
                   </span>
                 </div>
-                <div className="p-6">
-                  <h3 className="font-display text-2xl font-medium tracking-tight text-ink">
-                    {card.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-ink/65">
-                    {card.teaser}
-                  </p>
-                  <span className="mt-5 inline-flex items-center gap-2 font-sans text-[11px] font-bold tracking-[0.22em] text-maroon uppercase">
-                    <span className="underline-draw">Explore</span>
-                    <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                </div>
+                <h3 className="mt-7 font-display text-2xl font-medium tracking-tight text-ink">
+                  {card.title}
+                </h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/65">
+                  {card.teaser}
+                </p>
+                <span className="mt-6 inline-flex items-center gap-2 font-sans text-[11px] font-bold tracking-[0.22em] text-maroon uppercase">
+                  <span className="underline-draw">Explore</span>
+                  <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
               </a>
             </Reveal>
           ))}

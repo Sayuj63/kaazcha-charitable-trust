@@ -9,11 +9,13 @@ import { EASE } from "./shared";
 
 const SECTION_LINKS = [
   { label: "About", href: "#about" },
-  { label: "Initiatives", href: "#initiatives" },
-  { label: "Heritage", href: "#heritage" },
+  { label: "Heritage", href: "#highlights" },
+  { label: "Blessy Speaks", href: "#blessy" },
   { label: "News & Media", href: "#news" },
   { label: "Contact", href: "#contact" },
 ];
+
+const MARQUEE_TEXT = "NEXT EVENT ON 4TH OCTOBER";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -129,6 +131,26 @@ export function Navbar() {
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
       </nav>
+
+      {/* Sticky announcement marquee */}
+      <div className="overflow-hidden border-y-2 border-ink bg-forest text-cream">
+        <div
+          className="flex w-max animate-marquee items-center gap-0 whitespace-nowrap py-2.5"
+          style={{ animationDuration: "40s" }}
+          aria-hidden
+        >
+          {Array.from({ length: 12 }).map((_, i) => (
+            <span
+              key={i}
+              className="flex items-center font-sans text-[11px] font-bold tracking-[0.3em] uppercase sm:text-xs"
+            >
+              <span className="px-6">{MARQUEE_TEXT}</span>
+              <span className="text-gold-light">✦</span>
+            </span>
+          ))}
+        </div>
+        <span className="sr-only">{MARQUEE_TEXT}</span>
+      </div>
 
       {/* Mobile menu */}
       <AnimatePresence>
