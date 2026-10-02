@@ -258,7 +258,7 @@ const ml: Translations = {
     closeMenu: "മെനു അടയ്ക്കുക",
     menu: "മെനു",
     close: "അടയ്ക്കുക",
-    marquee: "പതിപ്പ് 5 — 'ശ്രീവല്ലി' · കാഴ്ച ചാരിറ്റബിൾ ട്രസ്റ്റ് കേന്ദ്ര സാഹിത്യ അക്കാദമിയുമായി സഹകരിക്കുന്നു",
+    marquee: "ഏട് 5- 'ശ്രീവല്ലി', കേന്ദ്ര സാഹിത്യ അക്കാദമിയുമായി സഹകരിക്കുന്ന കാഴ്ച ചാരിറ്റബിൾ ട്രസ്റ്റ്.",
   },
   hero: {
     lines: [
@@ -279,7 +279,7 @@ const ml: Translations = {
   },
   highlights: {
     eyebrow: "",
-    titleBefore: "ഒരു ",
+    titleBefore: "",
     titleEmphasis: "ജീവിക്കുന്ന",
     titleAfter: " പാരമ്പര്യത്തിലേക്കുള്ള മൂന്ന് വാതിലുകൾ",
     description:
