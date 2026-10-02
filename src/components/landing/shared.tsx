@@ -6,6 +6,12 @@ import { cn } from "@/lib/utils";
 /** Slow, reverent easing — heritage pacing, not startup bounce. */
 export const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
+/** Transparent logo artwork for each site language (832×300 / 841×300). */
+export const LOGOS = {
+  en: { src: "/logo-en.png", width: 832, height: 300 },
+  ml: { src: "/logo-ml.png", width: 841, height: 300 },
+} as const;
+
 /** Curated cultural imagery (Kerala / Indian heritage). Falls back to a themed
  *  pattern if a CDN image ever fails to load. */
 export const IMAGES = {
@@ -222,42 +228,5 @@ export function SmartImage({
       onError={() => setFailed(true)}
       className={className}
     />
-  );
-}
-
-/** Slow drifting strip of theme tags. */
-export function Marquee({
-  items,
-  className,
-  duration = 52,
-}: {
-  items: string[];
-  className?: string;
-  duration?: number;
-}) {
-  const doubled = [...items, ...items];
-  return (
-    <div
-      className={cn(
-        "overflow-hidden border-y-2 border-ink bg-forest text-cream",
-        className,
-      )}
-      aria-hidden
-    >
-      <div
-        className="flex w-max animate-marquee items-center gap-0 whitespace-nowrap py-3"
-        style={{ animationDuration: `${duration}s` }}
-      >
-        {doubled.map((item, i) => (
-          <span
-            key={i}
-            className="flex items-center font-sans text-xs font-semibold tracking-[0.3em] uppercase"
-          >
-            <span className="px-6">{item}</span>
-            <span className="text-gold-light">✦</span>
-          </span>
-        ))}
-      </div>
-    </div>
   );
 }

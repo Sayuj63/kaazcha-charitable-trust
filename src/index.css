@@ -54,11 +54,14 @@
   --color-gold: var(--gold);
   --color-gold-light: var(--gold-light);
   --color-ink: var(--ink);
+  --color-manila: var(--manila);
+  --color-manila-dark: var(--manila-dark);
+  --color-paper: var(--paper);
 }
 
 /* CHANGE VALUES FOR THEME — Kaazcha Charitable Trust */
 :root {
-  --radius: 0px;
+  --radius: 0.75rem;
 
   --cream: #ffffff;
   --ivory: #ffffff;
@@ -72,6 +75,10 @@
   --gold: #b9821f;
   --gold-light: #e0b44e;
   --ink: #201510;
+  --manila: #f1dfb4;
+  --manila-dark: #e4c88a;
+  /* warm off-white for panels and fields, in place of hard outlines */
+  --paper: #f6f1e7;
 
   --background: #ffffff;
   --foreground: #241711;
@@ -88,8 +95,8 @@
   --accent: #e8d6ae;
   --accent-foreground: #241711;
   --destructive: #a33b2e;
-  --border: #201510;
-  --input: #201510;
+  --border: rgb(32 21 16 / 0.12);
+  --input: rgb(32 21 16 / 0.16);
   --ring: #b9821f;
   --chart-1: #b4502a;
   --chart-2: #6e2323;
@@ -102,7 +109,7 @@
   --sidebar-primary-foreground: #faf2e3;
   --sidebar-accent: #efe2c6;
   --sidebar-accent-foreground: #241711;
-  --sidebar-border: #201510;
+  --sidebar-border: rgb(32 21 16 / 0.12);
   --sidebar-ring: #b9821f;
 }
 
@@ -137,13 +144,24 @@
 
 /* Typography & motion tokens */
 @theme {
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Fraunces", "Noto Serif Malayalam", Georgia, "Times New Roman", serif;
+  --font-hero: "Bebas Neue", "Manrope", sans-serif;
+  --font-sans: "Manrope", "Noto Sans Malayalam", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --animate-marquee: marquee 52s linear infinite;
   --animate-marquee-slow: marquee 78s linear infinite;
   --animate-kenburns: kenburns 30s ease-in-out infinite alternate;
   --animate-flame: flame 1.6s ease-in-out infinite;
   --animate-drift: drift 22s ease-in-out infinite alternate;
+  --animate-hero-pan: hero-pan 28s ease-in-out infinite alternate;
+
+  @keyframes hero-pan {
+    from {
+      background-position: 40% 35%;
+    }
+    to {
+      background-position: 60% 65%;
+    }
+  }
 
   @keyframes marquee {
     to {
@@ -260,4 +278,82 @@
   .text-shadow-hero {
     text-shadow: 0 2px 30px rgb(20 8 6 / 0.45);
   }
+}
+
+/* Malayalam script: wide letter-spacing breaks conjuncts, and tall glyphs need
+   more line-height than the Latin display settings allow. Unlayered so it wins
+   over Tailwind utilities. */
+html[lang="ml"] [class*="tracking-"] {
+  letter-spacing: 0.01em;
+}
+html[lang="ml"] h1,
+html[lang="ml"] h2,
+html[lang="ml"] h3 {
+  line-height: 1.35;
+}
+
+/* Hero: outlined letters filled with a photograph, one per line */
+.hero-text-image {
+  background-size: cover;
+  background-position: 50% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.hero-img-past {
+  background-image: url("/hero/hero-past-kathakali.jpg");
+}
+.hero-img-present {
+  background-image: url("/hero/hero-present-backwaters.jpg");
+}
+.hero-img-future {
+  background-image: url("/hero/hero-future-munnar.jpg");
+}
+.hero-text-outline {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px var(--ink);
+}
+
+/* Sticky notes: tinted paper, a strip of tape and a folded corner */
+.sticky-note {
+  position: relative;
+  background: var(--note);
+  box-shadow:
+    0 1px 2px rgb(32 21 16 / 0.12),
+    0 22px 30px -20px rgb(32 21 16 / 0.5);
+}
+.sticky-note::before {
+  content: "";
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 104px;
+  height: 28px;
+  translate: -50% 0;
+  rotate: -3deg;
+  background: rgb(255 255 255 / 0.62);
+  border: 1px solid rgb(32 21 16 / 0.08);
+}
+.sticky-note::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(315deg, var(--cream) 50%, var(--note-fold) 50%);
+}
+.note-gold {
+  --note: #fbe8a6;
+  --note-fold: #ead17a;
+}
+.note-green {
+  --note: #dbe9d1;
+  --note-fold: #bdd3ad;
+}
+.note-peach {
+  --note: #f8dccb;
+  --note-fold: #e9bea4;
 }

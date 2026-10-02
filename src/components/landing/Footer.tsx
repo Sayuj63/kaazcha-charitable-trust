@@ -1,109 +1,127 @@
-import { Facebook, Instagram, Mail, Youtube } from "lucide-react";
+import { Link } from "react-router";
 
+import { useSectionNav } from "@/hooks/use-section-nav";
+import { useLanguage } from "@/i18n/LanguageProvider";
+
+import { LOGOS } from "./shared";
+
+/** Links either scroll to a landing-page section or open a page. */
 const EXPLORE = [
-  { label: "About Us", href: "#about" },
-  { label: "Our Initiatives", href: "#initiatives" },
-  { label: "Culture & Heritage", href: "#heritage" },
-  { label: "News & Media", href: "#news" },
-  { label: "Be Part of Kaazcha", href: "#invitation" },
-];
+  { key: "about", section: "about" },
+  { key: "initiatives", to: "/initiatives" },
+  { key: "news", section: "news" },
+  { key: "join", section: "contact" },
+] as const;
 
-const SOCIALS = [
-  { label: "Instagram", icon: Instagram },
-  { label: "Facebook", icon: Facebook },
-  { label: "YouTube", icon: Youtube },
-  { label: "Email", icon: Mail },
-];
+const SOCIALS = ["instagram", "facebook", "youtube", "email"] as const;
+
+const LINK_CLASS =
+  "underline-draw text-sm text-cream/80 transition-colors hover:text-gold-light";
 
 export function Footer() {
+  const { t, lang } = useLanguage();
+  const f = t.footer;
+  const logo = LOGOS[lang];
+  const scrollToSection = useSectionNav();
+
   return (
-    <footer className="border-t-2 border-ink bg-deep text-cream">
+    <footer className="bg-forest text-cream">
       <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
-            <a href="#home" className="flex items-center gap-3">
-              <span className="flex size-11 items-center justify-center overflow-hidden border-2 border-cream bg-maroon shadow-brutal-cream">
-                <img
-                  src="/kcc-logo.jpeg"
-                  alt="Kaazcha Charitable Trust logo"
-                  className="h-full w-full object-cover"
-                />
-              </span>
-              <span className="flex flex-col leading-none">
-                <span className="font-display text-2xl font-medium tracking-tight">
-                  Kaazcha
-                </span>
-                <span className="mt-0.5 text-[9px] font-semibold tracking-[0.3em] text-gold-light uppercase">
-                  Charitable Trust
-                </span>
-              </span>
+            <a
+              href="#home"
+              aria-label={f.backToTop}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection("home");
+              }}
+              className="inline-flex rounded-2xl bg-white px-5 py-4 sm:px-6 sm:py-5"
+            >
+              <img
+                key={lang}
+                src={logo.src}
+                alt={f.logoAlt}
+                width={logo.width}
+                height={logo.height}
+                loading="lazy"
+                className="h-20 w-auto sm:h-28"
+              />
             </a>
-            <p className="mt-6 max-w-sm text-sm leading-relaxed text-cream/65">
-              A cultural heritage and community initiative from Keralam —
-              preserving heritage, inspiring generations, one story at a time.
+            <p className="mt-7 max-w-sm text-sm leading-relaxed text-cream/75">
+              {f.blurb}
             </p>
             <p className="mt-6 font-display text-sm italic text-gold-light">
-              “The past is not behind us. It lives in the stories we carry
-              forward.”
+              {f.quote}
             </p>
           </div>
 
           <div>
-            <p className="font-sans text-[11px] font-bold tracking-[0.3em] text-gold uppercase">
-              Explore
+            <p className="font-sans text-[11px] font-bold tracking-[0.3em] text-gold-light uppercase">
+              {f.exploreHeading}
             </p>
             <ul className="mt-5 space-y-3">
               {EXPLORE.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="underline-draw text-sm text-cream/75 transition-colors hover:text-gold-light"
-                  >
-                    {link.label}
-                  </a>
+                <li key={link.key}>
+                  {"to" in link ? (
+                    <Link to={link.to} className={LINK_CLASS}>
+                      {f.explore[link.key]}
+                    </Link>
+                  ) : (
+                    <a
+                      href={`#${link.section}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToSection(link.section);
+                      }}
+                      className={LINK_CLASS}
+                    >
+                      {f.explore[link.key]}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <p className="font-sans text-[11px] font-bold tracking-[0.3em] text-gold uppercase">
-              Follow
+            <p className="font-sans text-[11px] font-bold tracking-[0.3em] text-gold-light uppercase">
+              {f.followHeading}
             </p>
             <ul className="mt-5 space-y-3">
-              {SOCIALS.map((social) => (
-                <li key={social.label}>
+              {SOCIALS.map((key) => (
+                <li key={key}>
                   <a
                     href="#contact"
-                    className="group inline-flex items-center gap-3 text-sm text-cream/75 transition-colors hover:text-gold-light"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection("contact");
+                    }}
+                    className={LINK_CLASS}
                   >
-                    <social.icon className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
-                    {social.label}
+                    {f.socials[key]}
                   </a>
                 </li>
               ))}
             </ul>
-            <div className="mt-7 border-l-4 border-gold pl-4">
-              <p className="font-sans text-[11px] font-semibold tracking-[0.2em] text-cream/60 uppercase">
-                Write to us
+            <div className="mt-8">
+              <p className="font-sans text-[11px] font-semibold tracking-[0.2em] text-cream/65 uppercase">
+                {f.writeToUs}
               </p>
               <a
-                href="mailto:hello@kaazcha.in"
-                className="mt-1 block font-display text-lg italic text-cream/85 hover:text-gold-light"
+                href="mailto:admin@kaazchacharitabletrust.com"
+                className="mt-1 block font-display text-lg italic text-cream/90 hover:text-gold-light"
               >
-                hello@kaazcha.in
+                admin@kaazchacharitabletrust.com
               </a>
             </div>
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-cream/15 pt-7 sm:flex-row">
-          <p className="font-sans text-xs text-cream/50">
-            © 2026 Kaazcha Charitable Trust · Registered charitable trust,
-            Keralam
-          </p>
-          <p className="font-display text-xs italic text-cream/50">
-            Crafted with care, in the land of the Pampa river
+        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-cream/20 pt-7 text-center sm:flex-row sm:text-left">
+          <p className="font-sans text-xs text-cream/60">{f.copyright}</p>
+          <p className="font-display text-xs italic text-cream/60">
+            {f.crafted}
           </p>
         </div>
       </div>

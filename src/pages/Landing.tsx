@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 
 import { About } from "@/components/landing/About";
 import { BlessySpeaks } from "@/components/landing/BlessySpeaks";
@@ -12,6 +13,19 @@ import { Preloader } from "@/components/landing/Preloader";
 
 export default function Landing() {
   const [introDone, setIntroDone] = useState(false);
+  const { hash, key } = useLocation();
+
+  // Arriving from another page via /#section: scroll there once laid out.
+  useEffect(() => {
+    if (!hash) return;
+    const id = decodeURIComponent(hash.slice(1));
+    const timer = window.setTimeout(() => {
+      document
+        .getElementById(id)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
+    return () => window.clearTimeout(timer);
+  }, [hash, key]);
 
   return (
     <div className="min-h-screen bg-cream font-sans text-ink antialiased">

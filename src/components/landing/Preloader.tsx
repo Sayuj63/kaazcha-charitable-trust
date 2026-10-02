@@ -3,14 +3,25 @@ import { useEffect, useRef, useState } from "react";
 
 import { EASE } from "./shared";
 
+/** The intro plays once per page load, not every time a visitor returns to
+ *  the landing page from another route. */
+let introPlayed = false;
+
 export function Preloader({ onDone }: { onDone: () => void }) {
-  const [exiting, setExiting] = useState(false);
+  const [exiting, setExiting] = useState(introPlayed);
   const onDoneRef = useRef(onDone);
-  onDoneRef.current = onDone;
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    onDoneRef.current = onDone;
+  });
+
+  useEffect(() => {
+    if (
+      introPlayed ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      introPlayed = true;
       onDoneRef.current();
       return;
     }
@@ -22,8 +33,13 @@ export function Preloader({ onDone }: { onDone: () => void }) {
     window.setTimeout(() => setExiting(true), 250);
   };
 
+  const handleExitComplete = () => {
+    introPlayed = true;
+    onDoneRef.current();
+  };
+
   return (
-    <AnimatePresence onExitComplete={onDoneRef.current}>
+    <AnimatePresence onExitComplete={handleExitComplete}>
       {!exiting && (
         <motion.div
           exit={{ y: "-100%" }}

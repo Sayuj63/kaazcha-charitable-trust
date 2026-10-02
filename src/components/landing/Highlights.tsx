@@ -1,125 +1,104 @@
-import { ArrowRight, BookOpen, Landmark, Newspaper, Users } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import { Link } from "react-router";
+
+import { useSectionNav } from "@/hooks/use-section-nav";
+import { useLanguage } from "@/i18n/LanguageProvider";
+import { cn } from "@/lib/utils";
 
 import { Reveal, SectionHeader } from "./shared";
 
-type Card = {
-  num: string;
-  title: string;
-  teaser: string;
-  href: string;
-  Icon: LucideIcon;
-};
+type NoteKey = "initiatives" | "news" | "join";
 
-const CARDS: Card[] = [
+/** Three sticky notes, each pinned at its own slight angle. */
+const NOTES: {
+  key: NoteKey;
+  to?: string;
+  section?: string;
+  tone: string;
+  tilt: string;
+}[] = [
   {
-    num: "01",
-    title: "Our Initiatives",
-    teaser:
-      "Discover the programmes and initiatives through which Kaazcha works towards social, cultural and educational enrichment.",
-    href: "#blessy",
-    Icon: BookOpen,
+    key: "initiatives",
+    to: "/initiatives",
+    tone: "note-gold",
+    tilt: "-rotate-2",
   },
   {
-    num: "02",
-    title: "Culture & Heritage",
-    teaser:
-      "Explore stories, traditions, people, places and histories that have shaped our cultural identity.",
-    href: "#blessy",
-    Icon: Landmark,
+    key: "news",
+    to: "/media/library",
+    tone: "note-green",
+    tilt: "rotate-[1.5deg]",
   },
-  {
-    num: "03",
-    title: "News & Media",
-    teaser:
-      "Stay connected with our latest events, programmes, stories and activities.",
-    href: "#news",
-    Icon: Newspaper,
-  },
-  {
-    num: "04",
-    title: "Be Part of Kaazcha",
-    teaser:
-      "Join us in preserving the past, engaging with the present and creating possibilities for future generations.",
-    href: "#contact",
-    Icon: Users,
-  },
+  { key: "join", section: "contact", tone: "note-peach", tilt: "-rotate-1" },
 ];
 
 export function Highlights() {
+  const { t } = useLanguage();
+  const h = t.highlights;
+  const scrollToSection = useSectionNav();
+
   return (
     <section id="highlights" className="paper relative bg-cream py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeader
-          eyebrow="A home for heritage"
+          eyebrow={h.eyebrow}
           title={
             <>
-              Four doors into one <span className="italic text-maroon">living</span> tradition
+              {h.titleBefore}
+              <span className="italic text-maroon">{h.titleEmphasis}</span>
+              {h.titleAfter}
             </>
           }
-          description="Kaazcha is not a museum with glass cases. It is a working trust — gathering, teaching, documenting and celebrating the heritage of Keralam, every single day."
+          description={h.description}
         />
-      </div>
 
-      {/* Mobile: horizontal scroll rail. Desktop: 4-up grid. */}
-      <div className="mt-14 sm:mt-16">
-        <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-5 px-5 pb-6 sm:hidden">
-          {CARDS.map((card) => (
-            <a
-              key={card.num}
-              href={card.href}
-              className="group flex w-[78%] min-w-[260px] shrink-0 snap-start flex-col border-2 border-ink bg-card p-6 shadow-brutal-sm transition-all duration-400 hover:-translate-y-1.5 hover:border-gold hover:shadow-brutal"
-            >
-              <div className="flex items-center justify-between">
-                <span className="flex size-14 items-center justify-center border-2 border-ink bg-maroon text-cream shadow-brutal-sm transition-colors duration-300 group-hover:bg-gold group-hover:text-ink">
-                  <card.Icon className="size-6" />
-                </span>
-                <span className="font-display text-3xl italic text-gold">
-                  .{card.num}
-                </span>
-              </div>
-              <h3 className="mt-6 font-display text-2xl font-medium tracking-tight text-ink">
-                {card.title}
-              </h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/65">
-                {card.teaser}
-              </p>
-              <span className="mt-5 inline-flex items-center gap-2 font-sans text-[11px] font-bold tracking-[0.22em] text-maroon uppercase">
-                <span className="underline-draw">Explore</span>
-                <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-              </span>
-            </a>
-          ))}
-        </div>
-
-        <div className="mx-auto hidden max-w-7xl gap-7 px-5 sm:grid sm:grid-cols-2 sm:px-8 xl:grid-cols-4">
-          {CARDS.map((card, i) => (
-            <Reveal key={card.num} delay={i * 0.12} className="h-full">
-              <a
-                href={card.href}
-                className="group flex h-full flex-col border-2 border-ink bg-card p-7 shadow-brutal-sm transition-all duration-400 hover:-translate-y-1.5 hover:border-gold hover:shadow-brutal-lg"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="flex size-14 items-center justify-center border-2 border-ink bg-maroon text-cream shadow-brutal-sm transition-colors duration-300 group-hover:bg-gold group-hover:text-ink">
-                    <card.Icon className="size-6" />
-                  </span>
-                  <span className="font-display text-4xl italic text-gold">
-                    .{card.num}
-                  </span>
-                </div>
-                <h3 className="mt-7 font-display text-2xl font-medium tracking-tight text-ink">
-                  {card.title}
+        {/* Phones: swipeable rail. Tablet up: three across. */}
+        <div className="-mx-5 mt-10 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pt-6 pb-10 [scrollbar-width:none] sm:-mx-8 sm:mt-14 sm:scroll-px-8 sm:px-8 md:mx-0 md:grid md:snap-none md:grid-cols-3 md:gap-8 md:overflow-visible md:px-0 lg:gap-12">
+          {NOTES.map((note, i) => {
+            const body: ReactNode = (
+              <>
+                <h3 className="font-display text-2xl font-medium tracking-tight text-ink sm:text-3xl">
+                  {h.cards[note.key].title}
                 </h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/65">
-                  {card.teaser}
+                <p className="mt-4 flex-1 text-[15px] leading-relaxed text-ink/75">
+                  {h.cards[note.key].teaser}
                 </p>
-                <span className="mt-6 inline-flex items-center gap-2 font-sans text-[11px] font-bold tracking-[0.22em] text-maroon uppercase">
-                  <span className="underline-draw">Explore</span>
-                  <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                <span className="mt-8 font-sans text-[11px] font-bold tracking-[0.22em] text-maroon uppercase">
+                  <span className="underline-draw">{h.explore}</span>
                 </span>
-              </a>
-            </Reveal>
-          ))}
+              </>
+            );
+            const noteClass = cn(
+              "sticky-note group flex h-full min-h-[17rem] cursor-pointer flex-col px-7 pt-10 pb-9 text-left transition-[rotate,translate] duration-500 hover:-translate-y-1.5 hover:rotate-0 sm:px-8",
+              note.tone,
+              note.tilt,
+            );
+
+            return (
+              <Reveal
+                key={note.key}
+                delay={i * 0.12}
+                className="h-auto w-[78%] max-w-[20rem] shrink-0 snap-start md:h-full md:w-auto md:max-w-none"
+              >
+                {note.to ? (
+                  <Link to={note.to} className={noteClass}>
+                    {body}
+                  </Link>
+                ) : (
+                  <a
+                    href={`#${note.section}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(note.section ?? "contact");
+                    }}
+                    className={noteClass}
+                  >
+                    {body}
+                  </a>
+                )}
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

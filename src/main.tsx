@@ -6,10 +6,13 @@ import { ConvexReactClient } from "convex/react";
 import React, { StrictMode, useEffect, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
+import { LanguageProvider } from "./i18n/LanguageProvider";
 import "./index.css";
 
 // Lazy load route components for better code splitting
 const Landing = lazy(() => import("./pages/Landing.tsx"));
+const InitiativesPage = lazy(() => import("./pages/Initiatives.tsx"));
+const MediaPage = lazy(() => import("./pages/Media.tsx"));
 const AuthPage = lazy(() => import("./pages/Auth.tsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
@@ -106,6 +109,19 @@ function RouteSyncer() {
   return null;
 }
 
+/** Start each page at the top. Switching tabs inside a page (/media/seminars
+ *  → /media/library) keeps the position, and /#section links are left to the
+ *  landing page to scroll. */
+function ScrollToTop() {
+  const page = useLocation().pathname.split("/")[1] ?? "";
+
+  useEffect(() => {
+    if (!window.location.hash) window.scrollTo({ top: 0, behavior: "instant" });
+  }, [page]);
+
+  return null;
+}
+
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -114,11 +130,15 @@ createRoot(document.getElementById("root")!).render(
         <VlyToolbar />
       </ToolbarErrorBoundary>
       <ConvexAuthProvider client={convex}>
+        <LanguageProvider>
         <BrowserRouter>
           <RouteSyncer />
+          <ScrollToTop />
           <Suspense fallback={<RouteLoading />}>
             <Routes>
               <Route path="/" element={<Landing />} />
+              <Route path="/initiatives/:slug?" element={<InitiativesPage />} />
+              <Route path="/media/:folder?" element={<MediaPage />} />
               <Route
                 path="/auth"
                 element={<AuthPage redirectAfterAuth="/dashboard" />}
@@ -136,6 +156,7 @@ createRoot(document.getElementById("root")!).render(
           </Suspense>
         </BrowserRouter>
         <Toaster />
+        </LanguageProvider>
       </ConvexAuthProvider>
     </RootErrorBoundary>
   </StrictMode>,
