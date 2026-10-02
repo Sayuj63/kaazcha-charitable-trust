@@ -93,19 +93,9 @@ export default function MediaPage() {
                 title={mag.title[lang]}
                 subtitle={mag.edition[lang]}
               >
-                {mag.file ? (
-                  <a href={mag.file} download className={ACTION}>
-                    <span className="underline-draw">{m.download}</span>
-                  </a>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => toast(m.downloadSoon)}
-                    className={ACTION}
-                  >
-                    <span className="underline-draw">{m.download}</span>
-                  </button>
-                )}
+                <Link to="/#contact" className={ACTION}>
+                  <span className="underline-draw">{m.download}</span>
+                </Link>
               </MediaRow>
             ))}
 
