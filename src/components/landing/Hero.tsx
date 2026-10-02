@@ -23,7 +23,7 @@ export function Hero({ start }: { start: boolean }) {
     "col-start-1 row-start-1 grid gap-y-4 text-center font-hero font-black tracking-tight lg:grid-cols-3 lg:gap-x-10",
     lang === "ml"
       ? "text-[9vw] leading-[1.35] sm:text-[7vw] lg:text-[2.3vw] xl:text-[2.1rem]"
-      : "text-[13vw] leading-[1.02] sm:text-[10vw] lg:text-[4.2vw] xl:text-[4rem]",
+      : "text-[15vw] leading-[1.1] sm:text-[10vw] sm:leading-[1.02] lg:text-[4.2vw] xl:text-[4rem]",
   );
 
   const renderLines = (
@@ -50,13 +50,13 @@ export function Hero({ start }: { start: boolean }) {
       className="relative flex min-h-svh items-center bg-white pt-32 pb-16 sm:pt-36"
     >
       <h1 className="mx-auto grid w-full max-w-7xl px-5 sm:px-8">
-        {/* 1 — plain colored text, written first */}
+        {/* 1 — plain colored text: stays visible on mobile, fades on lg+ */}
         <motion.span
           aria-hidden
           initial={{ opacity: 1 }}
           animate={start ? { opacity: 0 } : undefined}
           transition={{ duration: 1.2, delay: 1.6, ease: EASE }}
-          className={layerClass}
+          className={cn(layerClass, "hero-layer-color")}
         >
           {renderLines(
             true,
@@ -65,25 +65,25 @@ export function Hero({ start }: { start: boolean }) {
           )}
         </motion.span>
 
-        {/* 2 — the photographs, visible only through the letters */}
+        {/* 2 — the photographs, visible only through the letters (lg+ only) */}
         <motion.span
           aria-hidden
           initial={{ opacity: 0 }}
           animate={start ? { opacity: 1 } : undefined}
           transition={{ duration: 1.4, delay: 1.4, ease: EASE }}
-          className={layerClass}
+          className={cn(layerClass, "hero-layer-photo")}
         >
           {renderLines(false, (i) =>
             cn("hero-text-image animate-hero-pan", LINE_IMAGES[i]),
           )}
         </motion.span>
 
-        {/* 3 — hollow outline on top */}
+        {/* 3 — hollow outline on top (lg+ only) */}
         <motion.span
           initial={{ opacity: 0 }}
           animate={start ? { opacity: 1 } : undefined}
           transition={{ duration: 1, delay: 1.2, ease: EASE }}
-          className={cn(layerClass, "hero-text-outline")}
+          className={cn(layerClass, "hero-text-outline hero-layer-outline")}
         >
           {lines.map((line, i) => (
             <span

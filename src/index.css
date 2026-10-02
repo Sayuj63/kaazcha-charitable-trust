@@ -316,6 +316,17 @@ html[lang="ml"] h3 {
   -webkit-text-stroke: 1px var(--ink);
 }
 
+/* Mobile hero: solid colored text only, no photo fill or outline */
+@media (max-width: 1023px) {
+  .hero-layer-color {
+    opacity: 1 !important;
+  }
+  .hero-layer-photo,
+  .hero-layer-outline {
+    display: none !important;
+  }
+}
+
 /* Sticky notes: tinted paper, a strip of tape and a folded corner */
 .sticky-note {
   position: relative;
