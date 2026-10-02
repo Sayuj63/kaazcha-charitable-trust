@@ -21,7 +21,7 @@ export function Hero({ start }: { start: boolean }) {
           "mx-auto grid w-full max-w-7xl gap-y-6 px-5 text-center font-hero font-black uppercase tracking-tight sm:px-8 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-0",
           lang === "ml"
             ? "text-[9vw] leading-[1.35] sm:text-[7vw] lg:text-[2.6vw] xl:text-[2.4rem]"
-            : "text-[15vw] leading-[1.1] sm:text-[10vw] sm:leading-[1.05] lg:text-[5vw] lg:leading-[1.08] xl:text-[4.5rem]",
+            : "text-[15vw] leading-[1.1] sm:text-[10vw] sm:leading-[1.05] lg:text-[6.5vw] lg:leading-[1.08] xl:text-[6rem]",
         )}
       >
         {lines.map((line, i) => {
