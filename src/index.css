@@ -292,40 +292,7 @@ html[lang="ml"] h3 {
   line-height: 1.35;
 }
 
-/* Hero: outlined letters filled with a photograph, one per line */
-.hero-text-image {
-  background-size: cover;
-  background-position: 50% 50%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-.hero-img-past {
-  background-image: url("/hero/hero-past-kathakali.jpg");
-}
-.hero-img-present {
-  background-image: url("/hero/hero-present-backwaters.jpg");
-}
-.hero-img-future {
-  background-image: url("/hero/hero-future-munnar.jpg");
-}
-.hero-text-outline {
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1px var(--ink);
-}
-
-/* Mobile hero: solid colored text only, no photo fill or outline */
-@media (max-width: 1023px) {
-  .hero-layer-color {
-    opacity: 1 !important;
-  }
-  .hero-layer-photo,
-  .hero-layer-outline {
-    display: none !important;
-  }
-}
+/* Hero: solid colored text only */
 
 /* Sticky notes: tinted paper, a strip of tape and a folded corner */
 .sticky-note {
