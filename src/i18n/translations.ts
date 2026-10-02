@@ -22,7 +22,7 @@ const en = {
     closeMenu: "Close menu",
     menu: "Menu",
     close: "Close",
-    marquee: "Edition 5 — 'Sreevalli' · Kaazcha Charitable Trust collaborating with Kendra Sahithya Academy",
+    marquee: "Next Event — Edition 5 — 'Sreevalli', Kaazcha Charitable Trust collaborating with Kendra Sahithya Academy",
   },
   hero: {
     lines: [
@@ -258,7 +258,7 @@ const ml: Translations = {
     closeMenu: "മെനു അടയ്ക്കുക",
     menu: "മെനു",
     close: "അടയ്ക്കുക",
-    marquee: "ഏട് 5- 'ശ്രീവല്ലി', കേന്ദ്ര സാഹിത്യ അക്കാദമിയുമായി സഹകരിക്കുന്ന കാഴ്ച ചാരിറ്റബിൾ ട്രസ്റ്റ്.",
+    marquee: "അടുത്ത പരിപാടി — ഏട് 5- 'ശ്രീവല്ലി', കേന്ദ്ര സാഹിത്യ അക്കാദമിയുമായി സഹകരിക്കുന്ന കാഴ്ച ചാരിറ്റബിൾ ട്രസ്റ്റ്.",
   },
   hero: {
     lines: [
