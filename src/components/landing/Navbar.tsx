@@ -106,7 +106,7 @@ export function Navbar() {
       <div className="overflow-hidden bg-forest text-cream">
         <div
           className="flex w-max animate-marquee items-center gap-0 whitespace-nowrap py-2.5"
-          style={{ animationDuration: "70s" }}
+          style={{ animationDuration: "120s" }}
           aria-hidden
         >
           {Array.from({ length: 12 }).map((_, i) => (
