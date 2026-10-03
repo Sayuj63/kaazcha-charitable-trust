@@ -26,7 +26,7 @@ const en = {
   },
   hero: {
     lines: [
-      "Honoring the Past.",
+      "Honouring the Past.",
       "Empowering the Present.",
       "Shaping the Future.",
     ],
