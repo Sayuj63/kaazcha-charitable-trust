@@ -147,16 +147,14 @@ export function Navbar() {
             className="pointer-events-none absolute inset-y-0 -left-10 w-10 bg-gradient-to-r from-transparent to-forest"
             aria-hidden
           />
-          <a
-            href={EVENT.registerUrl}
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to={EVENT.path}
             aria-label={t.nav.registerLabel}
             className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3.5 py-1 font-sans text-[10px] font-bold tracking-[0.14em] text-ink uppercase transition-colors duration-300 hover:bg-gold-light sm:px-5 sm:text-[11px]"
           >
             {t.event.register}
-            <span aria-hidden>↗</span>
-          </a>
+            <span aria-hidden>→</span>
+          </Link>
         </div>
       </div>
 
