@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
-import { Link, useLocation } from "react-router";
+import { Link } from "react-router";
 
 import { EVENT } from "@/content/event";
 import { useSectionNav } from "@/hooks/use-section-nav";
@@ -22,7 +22,6 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const pendingSection = useRef<string | null>(null);
   const scrollToSection = useSectionNav();
-  const { pathname } = useLocation();
   const { t, lang, toggleLang } = useLanguage();
   const logo = LOGOS[lang];
 
@@ -118,7 +117,8 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Sticky announcement marquee, with a pinned button to the event page */}
+      {/* Sticky announcement marquee (opens the event page) with a pinned
+          button straight to the registration form */}
       <div className="flex items-stretch bg-forest text-cream">
         <Link
           to={EVENT.path}
@@ -142,22 +142,22 @@ export function Navbar() {
           </div>
         </Link>
         <span className="sr-only">{t.nav.marquee}</span>
-        {pathname !== EVENT.path && (
-          <div className="relative flex shrink-0 items-center bg-forest pr-3 pl-2 sm:pr-8 sm:pl-3">
-            <span
-              className="pointer-events-none absolute inset-y-0 -left-10 w-10 bg-gradient-to-r from-transparent to-forest"
-              aria-hidden
-            />
-            <Link
-              to={EVENT.path}
-              aria-label={t.nav.eventButtonLabel}
-              className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3.5 py-1 font-sans text-[10px] font-bold tracking-[0.14em] text-ink uppercase transition-colors duration-300 hover:bg-gold-light sm:px-5 sm:text-[11px]"
-            >
-              {t.nav.eventButton}
-              <span aria-hidden>→</span>
-            </Link>
-          </div>
-        )}
+        <div className="relative flex shrink-0 items-center bg-forest pr-3 pl-2 sm:pr-8 sm:pl-3">
+          <span
+            className="pointer-events-none absolute inset-y-0 -left-10 w-10 bg-gradient-to-r from-transparent to-forest"
+            aria-hidden
+          />
+          <a
+            href={EVENT.registerUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={t.nav.registerLabel}
+            className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3.5 py-1 font-sans text-[10px] font-bold tracking-[0.14em] text-ink uppercase transition-colors duration-300 hover:bg-gold-light sm:px-5 sm:text-[11px]"
+          >
+            {t.event.register}
+            <span aria-hidden>↗</span>
+          </a>
+        </div>
       </div>
 
       {/* Mobile menu */}

@@ -41,9 +41,9 @@ export default function EventPage() {
               <span className="italic text-maroon">{EVENT.title[lang]}</span>
             </motion.h1>
 
-            <dl className="mt-10 grid gap-[2px] border-2 border-ink bg-ink shadow-brutal-sm sm:grid-cols-[auto_auto_minmax(0,1fr)]">
+            <dl className="mt-10 grid divide-y divide-ink/10 rounded-2xl bg-paper sm:grid-cols-[auto_auto_minmax(0,1fr)] sm:divide-x sm:divide-y-0">
               {details.map((item) => (
-                <div key={item.label} className="bg-paper px-5 py-4">
+                <div key={item.label} className="px-6 py-5">
                   <dt className={LABEL}>{item.label}</dt>
                   <dd className="mt-1.5 font-display text-lg leading-snug text-ink">
                     {item.value}
@@ -56,7 +56,7 @@ export default function EventPage() {
               href={EVENT.registerUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-8 inline-flex items-center gap-3 border-2 border-ink bg-maroon px-8 py-4 font-sans text-[13px] font-bold tracking-[0.16em] text-cream uppercase shadow-brutal transition-all duration-300 hover:translate-x-[3px] hover:translate-y-[3px] hover:bg-deep hover:shadow-none"
+              className="mt-8 inline-flex items-center gap-3 rounded-full bg-forest px-8 py-4 font-sans text-[13px] font-bold tracking-[0.18em] text-cream uppercase transition-colors duration-300 hover:bg-forest-deep"
             >
               {p.register}
               <span aria-hidden>↗</span>
@@ -89,13 +89,14 @@ export default function EventPage() {
             </Reveal>
           </div>
 
-          <Reveal className="lg:sticky lg:top-40 lg:self-start">
+          {/* Poster leads on phones; sits beside the details on desktop. */}
+          <Reveal className="order-first lg:order-none lg:sticky lg:top-40 lg:self-start">
             <img
               src={EVENT.poster}
               alt={p.posterAlt}
-              width={913}
-              height={1280}
-              className="w-full border-2 border-ink shadow-brutal-lg"
+              width={893}
+              height={1260}
+              className="w-full rounded-2xl"
             />
           </Reveal>
         </div>

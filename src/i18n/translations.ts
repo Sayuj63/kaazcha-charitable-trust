@@ -23,8 +23,7 @@ const en = {
     menu: "Menu",
     close: "Close",
     marquee: "Next Event — Edition 5 — 'Sreevalli' · October 31, 2026 · Kaazcha Charitable Trust collaborating with Kendra Sahitya Akademi",
-    eventButton: "Know more",
-    eventButtonLabel: "Sreevalli — event details and registration",
+    registerLabel: "Register for Sreevalli (opens the registration form)",
   },
   hero: {
     lines: [
@@ -270,8 +269,7 @@ const ml: Translations = {
     menu: "മെനു",
     close: "അടയ്ക്കുക",
     marquee: "അടുത്ത പരിപാടി — ഏട് 5- 'ശ്രീവല്ലി' · ഒക്ടോബർ 31, 2026 · കേന്ദ്ര സാഹിത്യ അക്കാദമിയുമായി സഹകരിക്കുന്ന കാഴ്ച ചാരിറ്റബിൾ ട്രസ്റ്റ്.",
-    eventButton: "കൂടുതൽ അറിയുക",
-    eventButtonLabel: "ശ്രീവല്ലി — പരിപാടിയുടെ വിശദാംശങ്ങളും രജിസ്ട്രേഷനും",
+    registerLabel: "ശ്രീവല്ലി — രജിസ്ട്രേഷൻ ഫോം",
   },
   hero: {
     lines: [
