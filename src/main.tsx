@@ -6,6 +6,7 @@ import { ConvexReactClient } from "convex/react";
 import React, { StrictMode, useEffect, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
+import { EVENT } from "./content/event";
 import { LanguageProvider } from "./i18n/LanguageProvider";
 import "./index.css";
 
@@ -13,6 +14,7 @@ import "./index.css";
 const Landing = lazy(() => import("./pages/Landing.tsx"));
 const InitiativesPage = lazy(() => import("./pages/Initiatives.tsx"));
 const MediaPage = lazy(() => import("./pages/Media.tsx"));
+const EventPage = lazy(() => import("./pages/Event.tsx"));
 const AuthPage = lazy(() => import("./pages/Auth.tsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
@@ -139,6 +141,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/" element={<Landing />} />
               <Route path="/initiatives/:slug?" element={<InitiativesPage />} />
               <Route path="/media/:folder?" element={<MediaPage />} />
+              <Route path={EVENT.path} element={<EventPage />} />
               <Route
                 path="/auth"
                 element={<AuthPage redirectAfterAuth="/dashboard" />}

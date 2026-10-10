@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { Link, useLocation } from "react-router";
 
+import { EVENT } from "@/content/event";
 import { useSectionNav } from "@/hooks/use-section-nav";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
@@ -18,7 +20,9 @@ const SECTION_LINKS = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pendingSection = useRef<string | null>(null);
   const scrollToSection = useSectionNav();
+  const { pathname } = useLocation();
   const { t, lang, toggleLang } = useLanguage();
   const logo = LOGOS[lang];
 
@@ -31,8 +35,20 @@ export function Navbar() {
 
   const goToSection = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
+    if (!open) {
+      scrollToSection(id);
+      return;
+    }
+    // Phones cancel a smooth scroll that starts while the menu is animating
+    // shut, so scroll once the close animation has finished.
+    pendingSection.current = id;
     setOpen(false);
-    scrollToSection(id);
+  };
+
+  const scrollAfterMenuCloses = () => {
+    const id = pendingSection.current;
+    pendingSection.current = null;
+    if (id) scrollToSection(id);
   };
 
   return (
@@ -102,28 +118,50 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Sticky announcement marquee */}
-      <div className="overflow-hidden bg-forest text-cream">
-        <div
-          className="flex w-max animate-marquee items-center gap-0 whitespace-nowrap py-2.5"
-          style={{ animationDuration: "120s" }}
+      {/* Sticky announcement marquee, with a pinned button to the event page */}
+      <div className="flex items-stretch bg-forest text-cream">
+        <Link
+          to={EVENT.path}
+          tabIndex={-1}
           aria-hidden
+          className="min-w-0 flex-1 overflow-hidden"
         >
-          {Array.from({ length: 12 }).map((_, i) => (
-            <span
-              key={i}
-              className="flex items-center font-sans text-[11px] font-bold tracking-[0.3em] uppercase sm:text-xs"
-            >
-              <span className="px-6">{t.nav.marquee}</span>
-              <span className="text-gold-light">✦</span>
-            </span>
-          ))}
-        </div>
+          <div
+            className="flex w-max animate-marquee items-center gap-0 whitespace-nowrap py-2.5"
+            style={{ animationDuration: "120s" }}
+          >
+            {Array.from({ length: 12 }).map((_, i) => (
+              <span
+                key={i}
+                className="flex items-center font-sans text-[11px] font-bold tracking-[0.3em] uppercase sm:text-xs"
+              >
+                <span className="px-6">{t.nav.marquee}</span>
+                <span className="text-gold-light">✦</span>
+              </span>
+            ))}
+          </div>
+        </Link>
         <span className="sr-only">{t.nav.marquee}</span>
+        {pathname !== EVENT.path && (
+          <div className="relative flex shrink-0 items-center bg-forest pr-3 pl-2 sm:pr-8 sm:pl-3">
+            <span
+              className="pointer-events-none absolute inset-y-0 -left-10 w-10 bg-gradient-to-r from-transparent to-forest"
+              aria-hidden
+            />
+            <Link
+              to={EVENT.path}
+              aria-label={t.nav.eventButtonLabel}
+              className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3.5 py-1 font-sans text-[10px] font-bold tracking-[0.14em] text-ink uppercase transition-colors duration-300 hover:bg-gold-light sm:px-5 sm:text-[11px]"
+            >
+              {t.nav.eventButton}
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Mobile menu */}
-      <AnimatePresence>
+      <AnimatePresence onExitComplete={scrollAfterMenuCloses}>
         {open && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
