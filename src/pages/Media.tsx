@@ -93,9 +93,20 @@ export default function MediaPage() {
                 title={mag.title[lang]}
                 subtitle={mag.edition[lang]}
               >
-                <Link to="/#contact" className={ACTION}>
-                  <span className="underline-draw">{m.download}</span>
-                </Link>
+                {mag.purchaseUrl ? (
+                  <a
+                    href={mag.purchaseUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={ACTION}
+                  >
+                    <span className="underline-draw">{m.download}</span>
+                  </a>
+                ) : (
+                  <Link to="/#contact" className={ACTION}>
+                    <span className="underline-draw">{m.download}</span>
+                  </Link>
+                )}
               </MediaRow>
             ))}
 

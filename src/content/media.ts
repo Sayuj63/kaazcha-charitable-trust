@@ -38,6 +38,8 @@ export type Magazine = {
   edition: Localized;
   cover?: string;
   file?: string;
+  /** Where "Reach us to purchase" points (e.g. an order form). */
+  purchaseUrl?: string;
 };
 
 export type Article = {
@@ -114,6 +116,7 @@ export const MAGAZINES: Magazine[] = [
     },
     cover: "/magazines/insight-vol01-issue01-cover.jpg",
     file: "/magazines/insight-vol01-issue01-thiruvallavaazhu.pdf",
+    purchaseUrl: "https://forms.gle/zEyktmM5cV8dkoXN8",
   },
 ];
 
