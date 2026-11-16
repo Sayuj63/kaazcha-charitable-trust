@@ -135,6 +135,8 @@ const en = {
     grid: "All photos",
     viewAll: "See every photograph on Google Drive",
     moreFolders: "More from Newsletter & Media",
+    loadFailed: "Couldn't load this section. Please check your connection.",
+    retry: "Try again",
   },
   initiatives: {
     eyebrow: "What we do",
@@ -380,6 +382,8 @@ const ml: Translations = {
     grid: "എല്ലാ ചിത്രങ്ങളും",
     viewAll: "എല്ലാ ചിത്രങ്ങളും ഗൂഗിൾ ഡ്രൈവിൽ കാണുക",
     moreFolders: "വാർത്താക്കുറിപ്പുകളിലും മാധ്യമങ്ങളിലും കൂടുതൽ",
+    loadFailed: "ഈ വിഭാഗം ലോഡ് ചെയ്യാനായില്ല. ഇന്റർനെറ്റ് കണക്ഷൻ പരിശോധിക്കുക.",
+    retry: "വീണ്ടും ശ്രമിക്കുക",
   },
   initiatives: {
     eyebrow: "ഞങ്ങൾ ചെയ്യുന്നത്",

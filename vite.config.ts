@@ -96,5 +96,7 @@ export default defineConfig({
     hmr: {
       overlay: false,
     },
+    // Local dev: run `vercel dev --listen 3210` for the /api functions.
+    proxy: { "/api": "http://localhost:3210" },
   },
 });

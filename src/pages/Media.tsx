@@ -16,16 +16,9 @@ import {
   SmartImage,
 } from "@/components/landing/shared";
 import { GalleryDialog } from "@/components/media/GalleryDialog";
-import {
-  ALBUMS,
-  ARTICLES,
-  FOLDER_KEYS,
-  MAGAZINES,
-  SEMINARS,
-  albumPhotos,
-  isFolderKey,
-  type Album,
-} from "@/content/media";
+import { useMedia } from "@/cms/client";
+import type { Album } from "@/cms/types";
+import { FOLDER_KEYS, SEMINARS, isFolderKey } from "@/content/media";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
@@ -38,10 +31,17 @@ export default function MediaPage() {
   const { t, lang } = useLanguage();
   const m = t.media;
   const [album, setAlbum] = useState<Album | null>(null);
+  const { status, retry } = useMedia();
 
   if (!isFolderKey(folder)) return <Navigate to="/#news" replace />;
   const active = folder;
+  const cms = status.state === "ready" ? status.data : null;
+  const MAGAZINES = cms?.magazines ?? [];
+  const ARTICLES = cms?.articles ?? [];
+  const ALBUMS = cms?.albums ?? [];
   const albumFor = (slug: string) => ALBUMS.find((a) => a.slug === slug);
+  const albumPhotos = (slug: string) => albumFor(slug)?.photos ?? [];
+  const needsCms = active !== "seminars";
 
   return (
     <PageShell>
@@ -58,6 +58,22 @@ export default function MediaPage() {
           {m.folders[active].label}
         </h1>
 
+        {needsCms && status.state === "loading" && <RowsSkeleton />}
+        {needsCms && status.state === "error" && (
+          <div className="mt-10 rounded-2xl bg-paper px-6 py-8 text-center">
+            <p className="font-display text-lg italic text-ink/70">
+              {m.loadFailed}
+            </p>
+            <button
+              type="button"
+              onClick={retry}
+              className={cn(ACTION, "mt-4")}
+            >
+              <span className="underline-draw">{m.retry}</span>
+            </button>
+          </div>
+        )}
+
         <ul className="mt-10 space-y-10 sm:mt-12 sm:space-y-12">
           {active === "seminars" &&
             SEMINARS.map((s) => {
@@ -66,7 +82,7 @@ export default function MediaPage() {
               return (
                 <MediaRow
                   key={s.slug}
-                  cover={photos[0]?.thumb}
+                  cover={photos[0]?.thumb ?? photos[0]?.src}
                   title={s.title[lang]}
                   subtitle={s.date[lang]}
                   onCoverClick={
@@ -87,7 +103,7 @@ export default function MediaPage() {
           {active === "magazines" &&
             MAGAZINES.map((mag) => (
               <MediaRow
-                key={mag.slug}
+                key={mag.id}
                 cover={mag.cover}
                 coverFit="contain"
                 title={mag.title[lang]}
@@ -113,7 +129,7 @@ export default function MediaPage() {
           {active === "newsletters" &&
             ARTICLES.map((article) => (
               <MediaRow
-                key={article.slug}
+                key={article.id}
                 cover={article.cover}
                 title={article.title[lang]}
                 subtitle={article.source[lang]}
@@ -141,11 +157,11 @@ export default function MediaPage() {
 
           {active === "library" &&
             ALBUMS.map((a) => {
-              const photos = albumPhotos(a.slug);
+              const photos = a.photos;
               return (
                 <MediaRow
-                  key={a.slug}
-                  cover={photos[0]?.thumb}
+                  key={a.id}
+                  cover={photos[0]?.thumb ?? photos[0]?.src}
                   title={a.title[lang]}
                   subtitle={
                     photos.length > 0
@@ -189,7 +205,7 @@ export default function MediaPage() {
       </motion.section>
 
       <GalleryDialog
-        key={album?.slug ?? "closed"}
+        key={album?.id ?? "closed"}
         album={album}
         onClose={() => setAlbum(null)}
       />
@@ -257,6 +273,25 @@ function MediaRow({
         <div className="mt-4">{children}</div>
       </div>
     </li>
+  );
+}
+
+function RowsSkeleton() {
+  return (
+    <ul className="mt-10 animate-pulse space-y-10 sm:mt-12 sm:space-y-12" aria-hidden>
+      {[0, 1].map((i) => (
+        <li
+          key={i}
+          className="grid items-center gap-5 sm:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] sm:gap-9"
+        >
+          <div className="aspect-[7/5] rounded-2xl bg-paper" />
+          <div className="space-y-3">
+            <div className="h-8 w-2/3 rounded bg-paper" />
+            <div className="h-3 w-1/2 rounded bg-paper" />
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
 

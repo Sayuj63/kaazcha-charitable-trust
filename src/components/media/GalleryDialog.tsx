@@ -3,7 +3,7 @@ import { useState, type KeyboardEvent } from "react";
 
 import { HeritagePattern } from "@/components/landing/shared";
 import { DialogOverlay, DialogPortal } from "@/components/ui/dialog";
-import { albumPhotos, type Album } from "@/content/media";
+import type { Album } from "@/cms/types";
 import { useLanguage } from "@/i18n/LanguageProvider";
 
 const TEXT_BUTTON =
@@ -22,7 +22,7 @@ export function GalleryDialog({
   const { t, lang } = useLanguage();
   const m = t.media;
   const [index, setIndex] = useState<number | null>(null);
-  const photos = album ? albumPhotos(album.slug) : [];
+  const photos = album?.photos ?? [];
   const title = album ? album.title[lang] : "";
 
   const step = (delta: number) =>
@@ -97,7 +97,7 @@ export function GalleryDialog({
                         className="block aspect-square w-full cursor-pointer overflow-hidden rounded-xl"
                       >
                         <img
-                          src={photo.thumb}
+                          src={photo.thumb ?? photo.src}
                           alt={m.photoAlt(title, i + 1)}
                           loading="lazy"
                           decoding="async"

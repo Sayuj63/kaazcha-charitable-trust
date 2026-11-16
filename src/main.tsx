@@ -6,6 +6,7 @@ import { ConvexReactClient } from "convex/react";
 import React, { StrictMode, useEffect, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
+import { AdminGate } from "./admin/AdminGate";
 import { EVENT } from "./content/event";
 import { LanguageProvider } from "./i18n/LanguageProvider";
 import "./index.css";
@@ -18,6 +19,7 @@ const EventPage = lazy(() => import("./pages/Event.tsx"));
 const AuthPage = lazy(() => import("./pages/Auth.tsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
+const PersonPage = lazy(() => import("./pages/Person.tsx"));
 
 // Simple loading fallback for route transitions
 function RouteLoading() {
@@ -154,7 +156,8 @@ createRoot(document.getElementById("root")!).render(
                   </RequireAuth>
                 }
               />
-              <Route path="*" element={<NotFound />} />
+              <Route path="/people/:slug" element={<PersonPage />} />
+              <Route path="*" element={<AdminGate fallback={<NotFound />} />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
