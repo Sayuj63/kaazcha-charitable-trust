@@ -84,11 +84,22 @@ export function useCollection<K extends CollectionName>(
           data = await adminApi.save(name, payload, etag);
         } catch (err) {
           if (!(err instanceof AdminError && err.status === 409)) throw err;
-          // Someone saved in between: re-apply only our edits onto their
-          // version instead of making the user retype everything.
-          const latest = await adminApi.load(name);
-          const merged = mergeEdits<{ id: string }>(JSON.parse(savedJson || "[]"), payload as { id: string }[], latest.items as { id: string }[]);
-          data = await adminApi.save(name, merged as Collections[K], latest.etag);
+          // Someone saved in between (or storage is still settling): re-apply
+          // only our edits onto the latest version instead of making the user
+          // retype everything. A few tries cover a just-finished save.
+          const base = JSON.parse(savedJson || "[]") as { id: string }[];
+          for (let attempt = 0; ; attempt++) {
+            const latest = await adminApi.load(name);
+            const merged = mergeEdits(base, payload as { id: string }[], latest.items as { id: string }[]);
+            try {
+              data = await adminApi.save(name, merged as Collections[K], latest.etag);
+              break;
+            } catch (retryErr) {
+              const conflict = retryErr instanceof AdminError && retryErr.status === 409;
+              if (!conflict || attempt >= 3) throw retryErr;
+              await new Promise((r) => setTimeout(r, 800 * (attempt + 1)));
+            }
+          }
         }
         setItems(data.items);
         setSavedJson(JSON.stringify(data.items));

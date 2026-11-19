@@ -33,18 +33,21 @@ export async function load<K extends CollectionName>(
   name: K,
   fresh = false,
 ): Promise<Loaded<K>> {
-  for (let attempt = 0; attempt < 4; attempt++) {
-    if (attempt > 0) await sleep(250 * attempt);
+  let last: Loaded<K> | null = null;
+  for (let attempt = 0; attempt < 6; attempt++) {
+    if (attempt > 0) await sleep(300 * attempt);
     const result = await get(path(name), { access: "public", useCache: !fresh });
     if (!result || !result.stream) {
       if ((await storedEtag(name)) === null) return { items: [] as Collections[K], etag: null };
       continue; // exists but not readable yet — retry
     }
     const text = await new Response(result.stream).text();
-    const etag = strong(result.blob.etag);
-    if (fresh && (await storedEtag(name)) !== etag) continue; // changed mid-read
-    return { items: JSON.parse(text) as Collections[K], etag };
+    last = { items: JSON.parse(text) as Collections[K], etag: strong(result.blob.etag) };
+    if (!fresh || (await storedEtag(name)) === last.etag) return last;
   }
+  // Still settling after a recent write. Content and ETag belong together, so
+  // a save from this copy is refused (409) rather than overwriting newer data.
+  if (last) return last;
   throw new Error(`Could not read ${name}; please try again`);
 }
 
