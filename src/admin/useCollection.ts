@@ -5,6 +5,26 @@ import type { CollectionName, Collections } from "@/cms/types";
 
 const unsaved = new Set<CollectionName>();
 
+type WithId = { id: string };
+
+/** Three-way merge by id: items added or edited in `draft` (relative to
+ *  `base`) win, items deleted from `draft` are removed, and everything else
+ *  comes from `latest`. */
+export function mergeEdits<T extends WithId>(base: T[], draft: T[], latest: T[]): T[] {
+  const baseJson = new Map(base.map((i) => [i.id, JSON.stringify(i)]));
+  const draftIds = new Set(draft.map((i) => i.id));
+  const changed = new Map(
+    draft.filter((i) => baseJson.get(i.id) !== JSON.stringify(i)).map((i) => [i.id, i]),
+  );
+  const removed = new Set(base.filter((i) => !draftIds.has(i.id)).map((i) => i.id));
+  const latestIds = new Set(latest.map((i) => i.id));
+  const added = [...changed.values()].filter((i) => !latestIds.has(i.id) && !baseJson.has(i.id));
+  return [
+    ...added,
+    ...latest.filter((i) => !removed.has(i.id)).map((i) => changed.get(i.id) ?? i),
+  ];
+}
+
 /** True while any open editor has edits that aren't saved yet. */
 export function hasUnsaved() {
   return unsaved.size > 0;
@@ -59,7 +79,17 @@ export function useCollection<K extends CollectionName>(
       setSaving(true);
       setError(null);
       try {
-        const data = await adminApi.save(name, payload, etag);
+        let data;
+        try {
+          data = await adminApi.save(name, payload, etag);
+        } catch (err) {
+          if (!(err instanceof AdminError && err.status === 409)) throw err;
+          // Someone saved in between: re-apply only our edits onto their
+          // version instead of making the user retype everything.
+          const latest = await adminApi.load(name);
+          const merged = mergeEdits<{ id: string }>(JSON.parse(savedJson || "[]"), payload as { id: string }[], latest.items as { id: string }[]);
+          data = await adminApi.save(name, merged as Collections[K], latest.etag);
+        }
         setItems(data.items);
         setSavedJson(JSON.stringify(data.items));
         setEtag(data.etag);
@@ -71,7 +101,7 @@ export function useCollection<K extends CollectionName>(
         setSaving(false);
       }
     },
-    [name, items, etag, handle],
+    [name, items, etag, savedJson, handle],
   );
 
   const dirty = useMemo(
