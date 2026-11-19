@@ -53,7 +53,7 @@ export async function POST(request: Request) {
   if (!isCollection(collection)) return json({ error: "Unknown collection" }, 400);
 
   if (body.action === "load") {
-    const { items, etag } = await load(collection, true);
+    const { items, etag } = await load(collection);
     return json({ items, etag });
   }
 

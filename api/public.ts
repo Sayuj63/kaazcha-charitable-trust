@@ -1,4 +1,4 @@
-import { load } from "./_lib/store.js";
+import { loadPublic } from "./_lib/store.js";
 
 /** Public, CDN-cached reads for the website.
  *  GET /api/public?c=media              → magazines, articles, albums
@@ -11,19 +11,19 @@ export async function GET(request: Request) {
 
   if (params.get("c") === "media") {
     const [magazines, articles, albums] = await Promise.all([
-      load("magazines"),
-      load("articles"),
-      load("albums"),
+      loadPublic("magazines"),
+      loadPublic("articles"),
+      loadPublic("albums"),
     ]);
     return Response.json(
-      { magazines: magazines.items, articles: articles.items, albums: albums.items },
+      { magazines, articles, albums },
       { headers },
     );
   }
 
   if (params.get("c") === "person") {
     const slug = (params.get("slug") ?? "").toLowerCase();
-    const { items } = await load("people");
+    const items = await loadPublic("people");
     const person = items.find(
       (p) => p.published && (p.slug === slug || p.aliases.includes(slug)),
     );
