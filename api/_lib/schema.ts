@@ -72,6 +72,25 @@ const album = z.object({
   photos: z.array(photo).max(500),
 });
 
+const siteEvent = z.object({
+  id,
+  slug,
+  showInBar: z.boolean(),
+  marquee: localized(400),
+  series: localized(200),
+  seriesMeaning: text(200).optional(),
+  chapter: localized(100),
+  title: localized(200),
+  intro: localized(5000),
+  welcome: localized(1000),
+  date: localized(100),
+  time: localized(100),
+  venue: localized(300),
+  registerUrl: link,
+  poster: link,
+  contacts: z.array(z.object({ name: localized(100), phone: text(40) })).max(10),
+});
+
 export const SCHEMAS = {
   people: z
     .array(person)
@@ -86,4 +105,10 @@ export const SCHEMAS = {
   magazines: z.array(magazine).max(500),
   articles: z.array(article).max(1000),
   albums: z.array(album).max(200),
+  events: z
+    .array(siteEvent)
+    .max(200)
+    .refine((list) => new Set(list.map((e) => e.slug)).size === list.length, {
+      message: "Two events share the same page link (slug)",
+    }),
 } satisfies Record<CollectionName, z.ZodType>;

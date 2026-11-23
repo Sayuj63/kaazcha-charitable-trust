@@ -7,7 +7,6 @@ import React, { StrictMode, useEffect, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 import { AdminGate } from "./admin/AdminGate";
-import { EVENT } from "./content/event";
 import { LanguageProvider } from "./i18n/LanguageProvider";
 import "./index.css";
 
@@ -143,7 +142,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/" element={<Landing />} />
               <Route path="/initiatives/:slug?" element={<InitiativesPage />} />
               <Route path="/media/:folder?" element={<MediaPage />} />
-              <Route path={EVENT.path} element={<EventPage />} />
+              <Route path="/events/:slug" element={<EventPage />} />
               <Route
                 path="/auth"
                 element={<AuthPage redirectAfterAuth="/dashboard" />}

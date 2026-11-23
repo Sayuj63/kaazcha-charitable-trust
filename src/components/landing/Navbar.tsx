@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { Link } from "react-router";
 
-import { EVENT } from "@/content/event";
+import { useBarEvent } from "@/cms/client";
 import { useSectionNav } from "@/hooks/use-section-nav";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
@@ -23,6 +23,8 @@ export function Navbar() {
   const pendingSection = useRef<string | null>(null);
   const scrollToSection = useSectionNav();
   const { t, lang, toggleLang } = useLanguage();
+  const barEvent = useBarEvent();
+  const marquee = barEvent ? barEvent.marquee[lang] || barEvent.marquee.en : "";
   const logo = LOGOS[lang];
 
   useEffect(() => {
@@ -119,9 +121,10 @@ export function Navbar() {
 
       {/* Sticky announcement marquee (opens the event page) with a pinned
           button straight to the registration form */}
+      {barEvent && (
       <div className="flex items-stretch bg-forest text-cream">
         <Link
-          to={EVENT.path}
+          to={`/events/${barEvent.slug}`}
           tabIndex={-1}
           aria-hidden
           className="min-w-0 flex-1 overflow-hidden"
@@ -135,20 +138,20 @@ export function Navbar() {
                 key={i}
                 className="flex items-center font-sans text-[11px] font-bold tracking-[0.3em] uppercase sm:text-xs"
               >
-                <span className="px-6">{t.nav.marquee}</span>
+                <span className="px-6">{marquee}</span>
                 <span className="text-gold-light">✦</span>
               </span>
             ))}
           </div>
         </Link>
-        <span className="sr-only">{t.nav.marquee}</span>
+        <span className="sr-only">{marquee}</span>
         <div className="relative flex shrink-0 items-center bg-forest pr-3 pl-2 sm:pr-8 sm:pl-3">
           <span
             className="pointer-events-none absolute inset-y-0 -left-10 w-10 bg-gradient-to-r from-transparent to-forest"
             aria-hidden
           />
           <Link
-            to={EVENT.path}
+            to={`/events/${barEvent.slug}`}
             aria-label={t.nav.registerLabel}
             className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3.5 py-1 font-sans text-[10px] font-bold tracking-[0.14em] text-ink uppercase transition-colors duration-300 hover:bg-gold-light sm:px-5 sm:text-[11px]"
           >
@@ -157,6 +160,7 @@ export function Navbar() {
           </Link>
         </div>
       </div>
+      )}
 
       {/* Mobile menu */}
       <AnimatePresence onExitComplete={scrollAfterMenuCloses}>

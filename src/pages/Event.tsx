@@ -2,20 +2,56 @@ import { motion } from "framer-motion";
 
 import { BackHomeLink, PageShell } from "@/components/landing/PageShell";
 import { EASE, Eyebrow, Reveal } from "@/components/landing/shared";
-import { EVENT } from "@/content/event";
+import { Link, useParams } from "react-router";
+
+import { useEvent } from "@/cms/client";
 import { useLanguage } from "@/i18n/LanguageProvider";
 
 const LABEL =
   "font-sans text-[11px] font-bold tracking-[0.24em] text-maroon uppercase";
 
-/** Page for the upcoming event linked from the announcement bar. */
+/** An event's page (edited in the admin), linked from the announcement bar. */
 export default function EventPage() {
+  const { slug } = useParams();
+  const status = useEvent(slug?.toLowerCase());
   const { t, lang } = useLanguage();
   const p = t.event;
+
+  if (status.state !== "ready") {
+    return (
+      <PageShell>
+        <div className="mx-auto max-w-7xl px-5 pb-24 sm:px-8 sm:pb-32">
+          <BackHomeLink label={p.backHome} />
+          {status.state === "loading" ? (
+            <div className="mt-8 grid animate-pulse gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)]">
+              <div className="space-y-4">
+                <div className="h-5 w-48 rounded bg-paper" />
+                <div className="h-14 w-4/5 rounded bg-paper" />
+                <div className="h-24 rounded-2xl bg-paper" />
+              </div>
+              <div className="order-first aspect-[893/1260] rounded-2xl bg-paper lg:order-none" />
+            </div>
+          ) : (
+            <div className="mt-16 max-w-xl">
+              <h1 className="font-display text-3xl font-medium tracking-tight text-ink">
+                {status.state === "missing" ? p.missing : p.loadFailed}
+              </h1>
+              <Link to="/" className="mt-6 inline-block font-sans text-[11px] font-bold tracking-[0.22em] text-forest uppercase">
+                <span className="underline-draw">{p.backHome}</span>
+              </Link>
+            </div>
+          )}
+        </div>
+      </PageShell>
+    );
+  }
+
+  const EVENT = status.data;
+  const L = (v: { en: string; ml: string }) => v[lang] || v.en || v.ml;
   const details = [
-    { label: p.date, value: EVENT.date[lang] },
-    { label: p.time, value: EVENT.time[lang] },
-    { label: p.venue, value: EVENT.venue[lang] },
+    { label: p.date, value: L(EVENT.date) },
+    { label: p.time, value: L(EVENT.time) },
+    { label: p.venue, value: L(EVENT.venue) },
   ];
 
   return (
@@ -25,8 +61,8 @@ export default function EventPage() {
 
         <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-16">
           <div>
-            <Eyebrow>{EVENT.series[lang]}</Eyebrow>
-            {lang === "en" && (
+            <Eyebrow>{L(EVENT.series)}</Eyebrow>
+            {lang === "en" && EVENT.seriesMeaning && (
               <p className="mt-1 font-sans text-[11px] font-bold tracking-[0.22em] text-ink/50 uppercase">
                 {EVENT.seriesMeaning}
               </p>
@@ -37,8 +73,8 @@ export default function EventPage() {
               transition={{ duration: 0.8, delay: 0.08, ease: EASE }}
               className="mt-4 font-display text-4xl leading-[1.08] font-medium tracking-tight text-ink sm:text-6xl"
             >
-              {EVENT.chapter[lang]}:{" "}
-              <span className="italic text-maroon">{EVENT.title[lang]}</span>
+              {L(EVENT.chapter) && <>{L(EVENT.chapter)}:{" "}</>}
+              <span className="italic text-maroon">{L(EVENT.title)}</span>
             </motion.h1>
 
             <dl className="mt-10 grid divide-y divide-ink/10 rounded-2xl bg-paper sm:grid-cols-[auto_auto_minmax(0,1fr)] sm:divide-x sm:divide-y-0">
@@ -52,6 +88,7 @@ export default function EventPage() {
               ))}
             </dl>
 
+            {EVENT.registerUrl && (
             <a
               href={EVENT.registerUrl}
               target="_blank"
@@ -61,21 +98,23 @@ export default function EventPage() {
               {p.register}
               <span aria-hidden>↗</span>
             </a>
+            )}
 
             <Reveal className="mt-12 max-w-2xl space-y-6">
               <p className="text-base leading-relaxed text-ink/80 sm:text-lg">
-                {EVENT.intro[lang]}
+                {L(EVENT.intro)}
               </p>
               <p className="font-display text-xl leading-snug italic text-maroon sm:text-2xl">
-                {EVENT.welcome[lang]}
+                {L(EVENT.welcome)}
               </p>
             </Reveal>
 
+            {EVENT.contacts.length > 0 && (
             <Reveal className="mt-12">
               <p className={LABEL}>{p.contactHeading}</p>
               <ul className="mt-3 space-y-2">
                 {EVENT.contacts.map((c) => (
-                  <li key={c.phone} className="text-base text-ink">
+                  <li key={`${c.phone}-${c.name.en}`} className="text-base text-ink">
                     {c.name[lang]} —{" "}
                     <a
                       href={`tel:${c.phone.replace(/\s/g, "")}`}
@@ -87,18 +126,19 @@ export default function EventPage() {
                 ))}
               </ul>
             </Reveal>
+            )}
           </div>
 
           {/* Poster leads on phones; sits beside the details on desktop. */}
+          {EVENT.poster && (
           <Reveal className="order-first lg:order-none lg:sticky lg:top-40 lg:self-start">
             <img
               src={EVENT.poster}
-              alt={p.posterAlt}
-              width={893}
-              height={1260}
+              alt={p.posterAlt(L(EVENT.title))}
               className="w-full rounded-2xl"
             />
           </Reveal>
+          )}
         </div>
       </div>
     </PageShell>

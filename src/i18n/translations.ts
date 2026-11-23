@@ -22,7 +22,6 @@ const en = {
     closeMenu: "Close menu",
     menu: "Menu",
     close: "Close",
-    marquee: "Next Event — Edition 5 — 'Sreevalli' · October 31, 2026 · Kaazcha Charitable Trust collaborating with Kendra Sahitya Akademi",
     registerLabel: "Register for Sreevalli (opens the registration form)",
   },
   hero: {
@@ -156,7 +155,9 @@ const en = {
     venue: "Venue",
     register: "Register now",
     contactHeading: "For more details",
-    posterAlt: "Poster for Sreevalli, Eedu 5 of Oru Desathinte Kadha Tedi",
+    posterAlt: (title: string) => `Poster for ${title}`,
+    missing: "This event page isn't available.",
+    loadFailed: "Couldn't load this event. Please check your connection.",
   },
   contact: {
     eyebrow: "Contact us",
@@ -270,7 +271,6 @@ const ml: Translations = {
     closeMenu: "മെനു അടയ്ക്കുക",
     menu: "മെനു",
     close: "അടയ്ക്കുക",
-    marquee: "അടുത്ത പരിപാടി — ഏട് 5- 'ശ്രീവല്ലി' · ഒക്ടോബർ 31, 2026 · കേന്ദ്ര സാഹിത്യ അക്കാദമിയുമായി സഹകരിക്കുന്ന കാഴ്ച ചാരിറ്റബിൾ ട്രസ്റ്റ്.",
     registerLabel: "ശ്രീവല്ലി — രജിസ്ട്രേഷൻ ഫോം",
   },
   hero: {
@@ -403,7 +403,9 @@ const ml: Translations = {
     venue: "സ്ഥലം",
     register: "രജിസ്റ്റർ ചെയ്യുക",
     contactHeading: "കൂടുതൽ വിവരങ്ങൾക്ക്",
-    posterAlt: "ശ്രീവല്ലി — ഒരു ദേശത്തിന്റെ കഥ തേടി, ഏട് 5 — പോസ്റ്റർ",
+    posterAlt: (title: string) => `${title} — പോസ്റ്റർ`,
+    missing: "ഈ പരിപാടിയുടെ പേജ് ലഭ്യമല്ല.",
+    loadFailed: "പരിപാടി ലോഡ് ചെയ്യാനായില്ല. ഇന്റർനെറ്റ് കണക്ഷൻ പരിശോധിക്കുക.",
   },
   contact: {
     eyebrow: "ഞങ്ങളെ ബന്ധപ്പെടുക",

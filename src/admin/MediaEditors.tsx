@@ -2,7 +2,14 @@ import { useRef, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
 import { newId, slugify } from "@/cms/client";
-import type { Album, Article, CollectionName, Collections, Magazine } from "@/cms/types";
+import type {
+  Album,
+  Article,
+  CollectionName,
+  Collections,
+  Magazine,
+  SiteEvent,
+} from "@/cms/types";
 import { cn } from "@/lib/utils";
 
 import {
@@ -17,6 +24,8 @@ import {
   LocalizedInput,
   SaveBar,
   TextInput,
+  Toggle,
+  INPUT,
 } from "./fields";
 import { uploadPhoto } from "./upload";
 import { useCollection } from "./useCollection";
@@ -420,6 +429,182 @@ function PhotoGrid({
           ))}
         </ul>
       )}
+    </div>
+  );
+}
+
+export function EventsEditor({ onSignedOut }: { onSignedOut: () => void }) {
+  return (
+    <ListEditor
+      name="events"
+      noun="event"
+      onSignedOut={onSignedOut}
+      intro="Each event gets its own page. The top-most event with “Show in announcement bar” on is the one scrolling across the top of every page — use ↑ ↓ to choose."
+      create={(): SiteEvent => ({
+        id: newId(),
+        slug: "",
+        showInBar: false,
+        marquee: { ...empty },
+        series: { ...empty },
+        chapter: { ...empty },
+        title: { ...empty },
+        intro: { ...empty },
+        welcome: { ...empty },
+        date: { ...empty },
+        time: { ...empty },
+        venue: { ...empty },
+        contacts: [],
+      })}
+      summary={(e) => ({
+        title: e.title.en || e.title.ml,
+        subtitle: `${e.showInBar ? "● In announcement bar · " : ""}${e.date.en}`,
+        image: e.poster,
+      })}
+      form={(e, update) => (
+        <>
+          <Toggle
+            label="Show in announcement bar"
+            description={
+              e.showInBar
+                ? "Scrolls across the top of every page and links to this event."
+                : "Not in the bar. Its page still works if someone has the link."
+            }
+            checked={e.showInBar}
+            onChange={(showInBar) => update({ showInBar })}
+          />
+          <LocalizedInput
+            label="Announcement bar text"
+            value={e.marquee}
+            onChange={(marquee) => update({ marquee })}
+            hint="e.g. Next Event — Edition 6 — 'Title' · December 12, 2026 · Kaazcha Charitable Trust"
+          />
+          <ImageInput
+            label="Poster"
+            value={e.poster}
+            onChange={(poster) => update({ poster })}
+            folder="events"
+            aspect="aspect-[893/1260]"
+            fit="contain"
+            maxEdge={2000}
+          />
+          <LocalizedInput
+            label="Title"
+            value={e.title}
+            onChange={(title) =>
+              update({ title, ...(!e.slug && title.en && { slug: slugify(title.en) }) })
+            }
+          />
+          <LocalizedInput
+            label="Edition / chapter (optional)"
+            value={e.chapter}
+            onChange={(chapter) => update({ chapter })}
+            hint="Shown before the title, e.g. Eedu 6"
+          />
+          <LocalizedInput
+            label="Series (optional)"
+            value={e.series}
+            onChange={(series) => update({ series })}
+            hint="e.g. Oru Desathinte Kadha Tedi"
+          />
+          <TextInput
+            label="Series meaning in English (optional)"
+            value={e.seriesMeaning ?? ""}
+            onChange={(v) => update({ seriesMeaning: v || undefined })}
+            placeholder="In Search of the Story of a Locale"
+          />
+          <LocalizedInput label="Date" value={e.date} onChange={(date) => update({ date })} />
+          <LocalizedInput label="Time" value={e.time} onChange={(time) => update({ time })} />
+          <LocalizedInput label="Venue" value={e.venue} onChange={(venue) => update({ venue })} />
+          <TextInput
+            label="Registration link"
+            value={e.registerUrl ?? ""}
+            onChange={(v) => update({ registerUrl: v || undefined })}
+            placeholder="https://forms.gle/…"
+            inputMode="url"
+            hint="Leave empty to hide the Register button on the event page."
+          />
+          <LocalizedInput
+            label="About the event"
+            value={e.intro}
+            onChange={(intro) => update({ intro })}
+            multiline
+            rows={6}
+          />
+          <LocalizedInput
+            label="Welcome line"
+            value={e.welcome}
+            onChange={(welcome) => update({ welcome })}
+            multiline
+            rows={2}
+          />
+          <ContactsInput
+            contacts={e.contacts}
+            onChange={(contacts) => update({ contacts })}
+          />
+          <TextInput
+            label="Page link"
+            value={e.slug}
+            onChange={(v) => update({ slug: slugify(v) })}
+            hint={`The event page is /events/${e.slug || "…"}. Filled from the English title.`}
+          />
+        </>
+      )}
+    />
+  );
+}
+
+function ContactsInput({
+  contacts,
+  onChange,
+}: {
+  contacts: SiteEvent["contacts"];
+  onChange: (c: SiteEvent["contacts"]) => void;
+}) {
+  const set = (i: number, patch: Partial<SiteEvent["contacts"][number]>) =>
+    onChange(contacts.map((c, j) => (j === i ? { ...c, ...patch } : c)));
+  return (
+    <div className="space-y-3">
+      <p className="font-sans text-[11px] font-bold tracking-[0.16em] text-ink/70 uppercase">
+        Contacts (“For more details”)
+      </p>
+      {contacts.map((c, i) => (
+        <div key={i} className="grid gap-2 rounded-2xl bg-paper p-3 sm:grid-cols-[1fr_1fr_1fr_auto]">
+          <input
+            className={INPUT}
+            placeholder="Name (English)"
+            value={c.name.en}
+            onChange={(ev) => set(i, { name: { ...c.name, en: ev.target.value } })}
+          />
+          <input
+            className={INPUT}
+            lang="ml"
+            placeholder="പേര് (മലയാളം)"
+            value={c.name.ml}
+            onChange={(ev) => set(i, { name: { ...c.name, ml: ev.target.value } })}
+          />
+          <input
+            className={INPUT}
+            type="tel"
+            placeholder="+91 …"
+            value={c.phone}
+            onChange={(ev) => set(i, { phone: ev.target.value })}
+          />
+          <button
+            type="button"
+            className={BTN_DANGER}
+            onClick={() => onChange(contacts.filter((_, j) => j !== i))}
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        className={BTN_SOFT}
+        onClick={() => onChange([...contacts, { name: { en: "", ml: "" }, phone: "" }])}
+      >
+        + Add contact
+      </button>
     </div>
   );
 }

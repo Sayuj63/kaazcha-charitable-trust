@@ -5,7 +5,7 @@ import { LOGOS } from "@/components/landing/shared";
 import { cn } from "@/lib/utils";
 
 import { BTN_PRIMARY, BTN_SOFT, INPUT } from "./fields";
-import { AlbumsEditor, ArticlesEditor, MagazinesEditor } from "./MediaEditors";
+import { AlbumsEditor, ArticlesEditor, EventsEditor, MagazinesEditor } from "./MediaEditors";
 import { PeopleEditor } from "./PeopleEditor";
 import { hasUnsaved } from "./useCollection";
 
@@ -14,6 +14,7 @@ const TABS = [
   { key: "magazines", label: "Magazines" },
   { key: "articles", label: "Newsletters" },
   { key: "albums", label: "Gallery" },
+  { key: "events", label: "Events" },
 ] as const;
 type Tab = (typeof TABS)[number]["key"];
 const TAB_KEY = "kct-admin-tab";
@@ -158,7 +159,7 @@ function Console({ onSignedOut }: { onSignedOut: () => void }) {
           </div>
         </div>
         <nav className="mx-auto max-w-5xl overflow-x-auto px-4 py-3 sm:px-6" aria-label="Sections">
-          <div className="grid grid-cols-4 gap-1 rounded-full bg-white p-1 ring-1 ring-ink/8 sm:flex sm:w-max sm:gap-1.5">
+          <div className="flex flex-wrap justify-center gap-1 rounded-3xl bg-white p-1 ring-1 ring-ink/8 sm:w-max sm:justify-start sm:gap-1.5 sm:rounded-full">
             {TABS.map((t) => (
               <button
                 key={t.key}
@@ -166,7 +167,7 @@ function Console({ onSignedOut }: { onSignedOut: () => void }) {
                 onClick={() => setTab(t.key)}
                 aria-current={tab === t.key ? "page" : undefined}
                 className={cn(
-                  "h-9 cursor-pointer rounded-full px-1.5 text-[11.5px] font-bold whitespace-nowrap transition-colors sm:px-4 sm:text-[13px]",
+                  "h-9 cursor-pointer rounded-full px-3.5 text-[12px] font-bold whitespace-nowrap transition-colors sm:px-4 sm:text-[13px]",
                   tab === t.key ? "bg-forest text-cream" : "text-ink/65 hover:text-ink",
                 )}
               >
@@ -182,6 +183,7 @@ function Console({ onSignedOut }: { onSignedOut: () => void }) {
         {tab === "magazines" && <MagazinesEditor key="magazines" onSignedOut={onSignedOut} />}
         {tab === "articles" && <ArticlesEditor key="articles" onSignedOut={onSignedOut} />}
         {tab === "albums" && <AlbumsEditor key="albums" onSignedOut={onSignedOut} />}
+        {tab === "events" && <EventsEditor key="events" onSignedOut={onSignedOut} />}
       </main>
     </>
   );

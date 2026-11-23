@@ -55,11 +55,38 @@ export type Album = {
   photos: Photo[];
 };
 
+export type EventContact = { name: Localized; phone: string };
+
+/** An event with its own page at `/events/<slug>`. The top-most event with
+ *  `showInBar` is promoted in the announcement bar on every page. */
+export type SiteEvent = {
+  id: string;
+  slug: string;
+  showInBar: boolean;
+  /** Scrolling text in the announcement bar. */
+  marquee: Localized;
+  series: Localized;
+  /** English gloss of a Malayalam series name (optional). */
+  seriesMeaning?: string;
+  /** e.g. "Eedu 5" — shown before the title. */
+  chapter: Localized;
+  title: Localized;
+  intro: Localized;
+  welcome: Localized;
+  date: Localized;
+  time: Localized;
+  venue: Localized;
+  registerUrl?: string;
+  poster?: string;
+  contacts: EventContact[];
+};
+
 export type Collections = {
   people: Person[];
   magazines: Magazine[];
   articles: Article[];
   albums: Album[];
+  events: SiteEvent[];
 };
 
 export type CollectionName = keyof Collections;
@@ -69,6 +96,7 @@ export const COLLECTIONS: CollectionName[] = [
   "magazines",
   "articles",
   "albums",
+  "events",
 ];
 
 export function isCollection(value: unknown): value is CollectionName {

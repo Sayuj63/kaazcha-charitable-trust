@@ -7,6 +7,7 @@ import type {
   Collections,
   Magazine,
   Person,
+  SiteEvent,
 } from "./types";
 
 export type MediaData = {
@@ -68,6 +69,73 @@ export function usePerson(slug: string | undefined) {
         if (!r.ok) throw new Error(String(r.status));
         const { person } = (await r.json()) as { person: Person };
         setStatus({ state: "ready", data: person });
+      })
+      .catch(() => live && setStatus({ state: "error" }));
+    return () => {
+      live = false;
+    };
+  }, [slug]);
+
+  return status;
+}
+
+const BAR_KEY = "kct-bar-event";
+let barRequest: Promise<SiteEvent | null> | null = null;
+
+function readBarCache(): SiteEvent | null | undefined {
+  try {
+    const raw = localStorage.getItem(BAR_KEY);
+    return raw === null ? undefined : (JSON.parse(raw) as SiteEvent | null);
+  } catch {
+    return undefined;
+  }
+}
+
+/** Event shown in the announcement bar, or null for none. Shows the last
+ *  known value straight away (no flash on every page) and refreshes it. */
+export function useBarEvent() {
+  const [event, setEvent] = useState<SiteEvent | null | undefined>(readBarCache);
+
+  useEffect(() => {
+    let live = true;
+    barRequest ??= fetch("/api/public?c=bar")
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((d: { event: SiteEvent | null }) => d.event);
+    barRequest
+      .then((e) => {
+        if (!live) return;
+        setEvent(e);
+        try {
+          localStorage.setItem(BAR_KEY, JSON.stringify(e));
+        } catch {
+          // storage blocked
+        }
+      })
+      .catch(() => {
+        barRequest = null;
+      });
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  return event ?? null;
+}
+
+export function useEvent(slug: string | undefined) {
+  const [status, setStatus] = useState<Status<SiteEvent>>({ state: "loading" });
+
+  useEffect(() => {
+    if (!slug) return setStatus({ state: "missing" });
+    let live = true;
+    setStatus({ state: "loading" });
+    fetch(`/api/public?c=event&slug=${encodeURIComponent(slug)}`)
+      .then(async (r) => {
+        if (!live) return;
+        if (r.status === 404) return setStatus({ state: "missing" });
+        if (!r.ok) throw new Error(String(r.status));
+        const { event } = (await r.json()) as { event: SiteEvent };
+        setStatus({ state: "ready", data: event });
       })
       .catch(() => live && setStatus({ state: "error" }));
     return () => {
