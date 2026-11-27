@@ -1,3 +1,4 @@
+import { deleteMessage, listMessages, moveMessage } from "./_lib/messages.js";
 import { ConflictError, load, save } from "./_lib/store.js";
 import { SCHEMAS } from "./_lib/schema.js";
 import {
@@ -48,6 +49,19 @@ export async function POST(request: Request) {
   if (!isAuthed(request)) return json({ error: "Not signed in" }, 401);
 
   if (body.action === "me") return json({ ok: true });
+
+  if (body.action === "messages") {
+    const folder = body.folder === "archive" ? "archive" : "inbox";
+    return json(await listMessages(folder));
+  }
+  if (body.action === "moveMessage" && typeof body.id === "string") {
+    await moveMessage(body.id, body.to === "inbox" ? "inbox" : "archive");
+    return json({ ok: true });
+  }
+  if (body.action === "deleteMessage" && typeof body.id === "string") {
+    await deleteMessage(body.id);
+    return json({ ok: true });
+  }
 
   const collection = body.collection;
   if (!isCollection(collection)) return json({ error: "Unknown collection" }, 400);

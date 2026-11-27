@@ -12,6 +12,7 @@ import {
   MagazinesEditor,
   SeminarsEditor,
 } from "./MediaEditors";
+import { MessagesView } from "./MessagesView";
 import { PeopleEditor } from "./PeopleEditor";
 import { hasUnsaved } from "./useCollection";
 
@@ -22,6 +23,7 @@ const TABS = [
   { key: "articles", label: "Newsletters" },
   { key: "albums", label: "Gallery" },
   { key: "events", label: "Events" },
+  { key: "messages", label: "Messages" },
 ] as const;
 type Tab = (typeof TABS)[number]["key"];
 const TAB_KEY = "kct-admin-tab";
@@ -192,6 +194,7 @@ function Console({ onSignedOut }: { onSignedOut: () => void }) {
         {tab === "articles" && <ArticlesEditor key="articles" onSignedOut={onSignedOut} />}
         {tab === "albums" && <AlbumsEditor key="albums" onSignedOut={onSignedOut} />}
         {tab === "events" && <EventsEditor key="events" onSignedOut={onSignedOut} />}
+        {tab === "messages" && <MessagesView key="messages" onSignedOut={onSignedOut} />}
       </main>
     </>
   );

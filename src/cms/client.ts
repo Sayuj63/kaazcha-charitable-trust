@@ -170,7 +170,25 @@ async function admin<T>(body: Record<string, unknown>): Promise<T> {
   return data;
 }
 
+export type InboxMessage = {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  organisation?: string;
+  interest?: string;
+  subject?: string;
+  message: string;
+  lang?: string;
+  receivedAt: number;
+};
+
 export const adminApi = {
+  messages: (folder: "inbox" | "archive") =>
+    admin<{ total: number; items: InboxMessage[] }>({ action: "messages", folder }),
+  moveMessage: (id: string, to: "inbox" | "archive") =>
+    admin<{ ok: true }>({ action: "moveMessage", id, to }),
+  deleteMessage: (id: string) => admin<{ ok: true }>({ action: "deleteMessage", id }),
   login: (username: string, password: string) =>
     admin<{ ok: true }>({ action: "login", username, password }),
   logout: () => admin<{ ok: true }>({ action: "logout" }),

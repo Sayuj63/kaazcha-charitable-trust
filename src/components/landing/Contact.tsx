@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useMutation } from "convex/react";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { toast } from "sonner";
 
@@ -9,7 +8,6 @@ import {
   CONTACT_PHONE,
   SOCIAL_LINKS,
 } from "@/content/contact";
-import { api } from "@/convex/_generated/api";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
@@ -62,7 +60,6 @@ function Field({
 export function Contact() {
   const { t, lang } = useLanguage();
   const c = t.contact;
-  const submitContact = useMutation(api.contact.submitContact);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -87,7 +84,14 @@ export function Contact() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await submitContact({
+      const honeypot = (e.currentTarget.elements.namedItem("website") as HTMLInputElement | null)
+        ?.value;
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        lang,
+        website: honeypot || undefined,
         name: form.name,
         email: form.email,
         phone: form.phone || undefined,
@@ -95,7 +99,9 @@ export function Contact() {
         interest: form.interest || undefined,
         subject: form.subject || undefined,
         message: form.message,
+        }),
       });
+      if (!res.ok) throw new Error(String(res.status));
       toast(c.successTitle, { description: c.successDescription });
       setForm({
         name: "",
@@ -204,6 +210,15 @@ export function Contact() {
               onSubmit={handleSubmit}
               className="rounded-3xl bg-paper p-6 sm:p-9"
             >
+              {/* Spam trap: invisible to people, filled in by bots. */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden
+                className="absolute -left-[9999px] h-px w-px opacity-0"
+              />
               <p className="font-sans text-[11px] font-bold tracking-[0.26em] text-maroon uppercase">
                 {c.formHeading}
               </p>
