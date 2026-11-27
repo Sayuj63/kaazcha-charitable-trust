@@ -55,6 +55,17 @@ export type Album = {
   photos: Photo[];
 };
 
+/** A seminar under Newsletter & Media → Seminars: a short summary and up to
+ *  two images (typically the poster and the programme schedule). */
+export type Seminar = {
+  id: string;
+  title: Localized;
+  date: Localized;
+  summary: Localized;
+  poster?: string;
+  schedule?: string;
+};
+
 export type EventContact = { name: Localized; phone: string };
 
 /** An event with its own page at `/events/<slug>`. The top-most event with
@@ -87,6 +98,7 @@ export type Collections = {
   articles: Article[];
   albums: Album[];
   events: SiteEvent[];
+  seminars: Seminar[];
 };
 
 export type CollectionName = keyof Collections;
@@ -97,6 +109,7 @@ export const COLLECTIONS: CollectionName[] = [
   "articles",
   "albums",
   "events",
+  "seminars",
 ];
 
 export function isCollection(value: unknown): value is CollectionName {

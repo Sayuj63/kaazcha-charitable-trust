@@ -18,7 +18,8 @@ import {
 import { GalleryDialog } from "@/components/media/GalleryDialog";
 import { useMedia } from "@/cms/client";
 import type { Album } from "@/cms/types";
-import { FOLDER_KEYS, SEMINARS, isFolderKey } from "@/content/media";
+import { FOLDER_KEYS, isFolderKey } from "@/content/media";
+import { ImageViewer, type ViewerImage } from "@/components/media/ImageViewer";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,12 @@ export default function MediaPage() {
   const { t, lang } = useLanguage();
   const m = t.media;
   const [album, setAlbum] = useState<Album | null>(null);
+  const [viewer, setViewer] = useState<{
+    id: string;
+    title: string;
+    images: ViewerImage[];
+    start: number;
+  } | null>(null);
   const { status, retry } = useMedia();
 
   if (!isFolderKey(folder)) return <Navigate to="/#news" replace />;
@@ -39,9 +46,7 @@ export default function MediaPage() {
   const MAGAZINES = cms?.magazines ?? [];
   const ARTICLES = cms?.articles ?? [];
   const ALBUMS = cms?.albums ?? [];
-  const albumFor = (slug: string) => ALBUMS.find((a) => a.slug === slug);
-  const albumPhotos = (slug: string) => albumFor(slug)?.photos ?? [];
-  const needsCms = active !== "seminars";
+  const SEMINARS = cms?.seminars ?? [];
 
   return (
     <PageShell>
@@ -58,8 +63,8 @@ export default function MediaPage() {
           {m.folders[active].label}
         </h1>
 
-        {needsCms && status.state === "loading" && <RowsSkeleton />}
-        {needsCms && status.state === "error" && (
+        {status.state === "loading" && <RowsSkeleton />}
+        {status.state === "error" && (
           <div className="mt-10 rounded-2xl bg-paper px-6 py-8 text-center">
             <p className="font-display text-lg italic text-ink/70">
               {m.loadFailed}
@@ -77,25 +82,42 @@ export default function MediaPage() {
         <ul className="mt-10 space-y-10 sm:mt-12 sm:space-y-12">
           {active === "seminars" &&
             SEMINARS.map((s) => {
-              const photos = albumPhotos(s.slug);
-              const seminarAlbum = albumFor(s.slug);
+              const title = s.title[lang] || s.title.en;
+              const images = [
+                s.poster && { src: s.poster, label: m.poster },
+                s.schedule && { src: s.schedule, label: m.schedule },
+              ].filter((x): x is ViewerImage => Boolean(x));
+              const open = (start: number) => setViewer({ title, images, start, id: s.id });
               return (
                 <MediaRow
-                  key={s.slug}
-                  cover={photos[0]?.thumb ?? photos[0]?.src}
-                  title={s.title[lang]}
-                  subtitle={s.date[lang]}
-                  onCoverClick={
-                    photos.length > 0 && seminarAlbum
-                      ? () => setAlbum(seminarAlbum)
-                      : undefined
-                  }
+                  key={s.id}
+                  cover={images[0]?.src}
+                  coverFit="contain"
+                  title={title}
+                  subtitle={s.date[lang] || s.date.en}
+                  onCoverClick={images.length > 0 ? () => open(0) : undefined}
                 >
                   <ClampText
-                    text={s.description[lang]}
+                    text={s.summary[lang] || s.summary.en}
                     more={m.more}
                     less={m.less}
                   />
+                  {images.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+                      {images.map((img, i) => (
+                        <button
+                          key={img.src}
+                          type="button"
+                          onClick={() => open(i)}
+                          className={ACTION}
+                        >
+                          <span className="underline-draw">
+                            {i === 0 && s.poster ? m.viewPoster : m.viewSchedule}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </MediaRow>
               );
             })}
@@ -203,6 +225,16 @@ export default function MediaPage() {
           </ul>
         </nav>
       </motion.section>
+
+      {viewer && (
+        <ImageViewer
+          key={`${viewer.id}-${viewer.start}`}
+          title={viewer.title}
+          images={viewer.images}
+          start={viewer.start}
+          onClose={() => setViewer(null)}
+        />
+      )}
 
       <GalleryDialog
         key={album?.id ?? "closed"}

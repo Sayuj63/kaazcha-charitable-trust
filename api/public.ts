@@ -1,7 +1,7 @@
 import { loadPublic } from "./_lib/store.js";
 
 /** Public, CDN-cached reads for the website.
- *  GET /api/public?c=media              → magazines, articles, albums
+ *  GET /api/public?c=media              → magazines, articles, albums, seminars
  *  GET /api/public?c=person&slug=<slug> → one published personality
  *  GET /api/public?c=bar                → event in the announcement bar
  *  GET /api/public?c=event&slug=<slug>  → one event page */
@@ -12,13 +12,14 @@ export async function GET(request: Request) {
   };
 
   if (params.get("c") === "media") {
-    const [magazines, articles, albums] = await Promise.all([
+    const [magazines, articles, albums, seminars] = await Promise.all([
       loadPublic("magazines"),
       loadPublic("articles"),
       loadPublic("albums"),
+      loadPublic("seminars"),
     ]);
     return Response.json(
-      { magazines, articles, albums },
+      { magazines, articles, albums, seminars },
       { headers },
     );
   }

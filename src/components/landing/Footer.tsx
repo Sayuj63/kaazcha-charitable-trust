@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 
+import { CONTACT_EMAIL, SOCIAL_LINKS } from "@/content/contact";
 import { useSectionNav } from "@/hooks/use-section-nav";
 import { useLanguage } from "@/i18n/LanguageProvider";
 
@@ -13,7 +14,6 @@ const EXPLORE = [
   { key: "join", section: "contact" },
 ] as const;
 
-const SOCIALS = ["instagram", "facebook", "youtube", "email"] as const;
 
 const LINK_CLASS =
   "underline-draw text-sm text-cream/80 transition-colors hover:text-gold-light";
@@ -89,14 +89,12 @@ export function Footer() {
               {f.followHeading}
             </p>
             <ul className="mt-5 space-y-3">
-              {SOCIALS.map((key) => (
+              {SOCIAL_LINKS.map(({ key, url }) => (
                 <li key={key}>
                   <a
-                    href="#contact"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection("contact");
-                    }}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={LINK_CLASS}
                   >
                     {f.socials[key]}
@@ -109,10 +107,10 @@ export function Footer() {
                 {f.writeToUs}
               </p>
               <a
-                href="mailto:admin@kaazchacharitabletrust.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="mt-1 block font-display text-lg italic text-cream/90 hover:text-gold-light"
               >
-                admin@kaazchacharitabletrust.com
+                {CONTACT_EMAIL}
               </a>
             </div>
           </div>

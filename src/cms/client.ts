@@ -7,10 +7,12 @@ import type {
   Collections,
   Magazine,
   Person,
+  Seminar,
   SiteEvent,
 } from "./types";
 
 export type MediaData = {
+  seminars: Seminar[];
   magazines: Magazine[];
   articles: Article[];
   albums: Album[];

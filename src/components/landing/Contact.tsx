@@ -3,13 +3,18 @@ import { useMutation } from "convex/react";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { toast } from "sonner";
 
+import {
+  ADDRESS_LINES,
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  SOCIAL_LINKS,
+} from "@/content/contact";
 import { api } from "@/convex/_generated/api";
 import { useLanguage } from "@/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
 import { EASE, Eyebrow, Reveal } from "./shared";
 
-const SOCIALS = ["instagram", "facebook", "youtube", "other"] as const;
 
 const FIELD =
   "w-full rounded-xl border border-transparent bg-cream text-sm text-ink transition-colors duration-300 outline-none focus:border-gold";
@@ -55,7 +60,7 @@ function Field({
 }
 
 export function Contact() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const c = t.contact;
   const submitContact = useMutation(api.contact.submitContact);
   const [submitting, setSubmitting] = useState(false);
@@ -148,18 +153,41 @@ export function Contact() {
                 {c.orgName}
               </p>
               <ul className="mt-3 space-y-1.5 text-sm leading-relaxed text-ink/70">
-                <li>{c.address}</li>
-                <li>{c.email}</li>
-                <li>{c.phone}</li>
+                <li>
+                  {ADDRESS_LINES[lang].map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </li>
+                <li>
+                  {c.email}{" "}
+                  <a
+                    href={`mailto:${CONTACT_EMAIL}`}
+                    className="font-medium text-ink/85 underline-offset-4 hover:text-maroon hover:underline"
+                  >
+                    {CONTACT_EMAIL}
+                  </a>
+                </li>
+                {CONTACT_PHONE && (
+                  <li>
+                    {c.phone}{" "}
+                    <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="font-medium text-ink/85">
+                      {CONTACT_PHONE}
+                    </a>
+                  </li>
+                )}
               </ul>
               <p className="mt-6 font-sans text-[11px] font-bold tracking-[0.26em] text-maroon uppercase">
                 {c.followHeading}
               </p>
               <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
-                {SOCIALS.map((key) => (
+                {SOCIAL_LINKS.map(({ key, url }) => (
                   <li key={key}>
                     <a
-                      href="#contact"
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="underline-draw text-sm font-medium text-ink/80 transition-colors hover:text-maroon"
                     >
                       {c.socials[key]}

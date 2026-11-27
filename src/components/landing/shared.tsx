@@ -6,10 +6,11 @@ import { cn } from "@/lib/utils";
 /** Slow, reverent easing — heritage pacing, not startup bounce. */
 export const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-/** Transparent logo artwork for each site language (832×300 / 841×300). */
+/** Transparent logo artwork for each site language (1033×300 / 829×300),
+ *  rendered from the trust's Nov 2026 logo PDFs. */
 export const LOGOS = {
-  en: { src: "/logo-en.png", width: 832, height: 300 },
-  ml: { src: "/logo-ml.png", width: 841, height: 300 },
+  en: { src: "/logo-en.png?v=2", width: 1033, height: 300 },
+  ml: { src: "/logo-ml.png?v=2", width: 829, height: 300 },
 } as const;
 
 /** Curated cultural imagery (Kerala / Indian heritage). Falls back to a themed

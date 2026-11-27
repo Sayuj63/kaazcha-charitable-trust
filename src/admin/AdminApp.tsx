@@ -5,12 +5,19 @@ import { LOGOS } from "@/components/landing/shared";
 import { cn } from "@/lib/utils";
 
 import { BTN_PRIMARY, BTN_SOFT, INPUT } from "./fields";
-import { AlbumsEditor, ArticlesEditor, EventsEditor, MagazinesEditor } from "./MediaEditors";
+import {
+  AlbumsEditor,
+  ArticlesEditor,
+  EventsEditor,
+  MagazinesEditor,
+  SeminarsEditor,
+} from "./MediaEditors";
 import { PeopleEditor } from "./PeopleEditor";
 import { hasUnsaved } from "./useCollection";
 
 const TABS = [
   { key: "people", label: "Personalities" },
+  { key: "seminars", label: "Seminars" },
   { key: "magazines", label: "Magazines" },
   { key: "articles", label: "Newsletters" },
   { key: "albums", label: "Gallery" },
@@ -180,6 +187,7 @@ function Console({ onSignedOut }: { onSignedOut: () => void }) {
 
       <main className="mx-auto max-w-5xl px-4 pt-2 sm:px-6">
         {tab === "people" && <PeopleEditor key="people" onSignedOut={onSignedOut} />}
+        {tab === "seminars" && <SeminarsEditor key="seminars" onSignedOut={onSignedOut} />}
         {tab === "magazines" && <MagazinesEditor key="magazines" onSignedOut={onSignedOut} />}
         {tab === "articles" && <ArticlesEditor key="articles" onSignedOut={onSignedOut} />}
         {tab === "albums" && <AlbumsEditor key="albums" onSignedOut={onSignedOut} />}

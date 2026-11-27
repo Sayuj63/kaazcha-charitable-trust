@@ -8,6 +8,7 @@ import type {
   CollectionName,
   Collections,
   Magazine,
+  Seminar,
   SiteEvent,
 } from "@/cms/types";
 import { cn } from "@/lib/utils";
@@ -606,5 +607,64 @@ function ContactsInput({
         + Add contact
       </button>
     </div>
+  );
+}
+
+export function SeminarsEditor({ onSignedOut }: { onSignedOut: () => void }) {
+  return (
+    <ListEditor
+      name="seminars"
+      noun="seminar"
+      onSignedOut={onSignedOut}
+      intro="Shown under Newsletter & Media → Seminars, top first. Each has a short summary and up to two images — the poster and the programme schedule."
+      create={(): Seminar => ({
+        id: newId(),
+        title: { ...empty },
+        date: { ...empty },
+        summary: { ...empty },
+      })}
+      summary={(sem) => ({
+        title: sem.title.en || sem.title.ml,
+        subtitle: sem.date.en,
+        image: sem.poster ?? sem.schedule,
+      })}
+      form={(sem, update) => (
+        <>
+          <LocalizedInput label="Title" value={sem.title} onChange={(title) => update({ title })} />
+          <LocalizedInput
+            label="Date"
+            value={sem.date}
+            onChange={(date) => update({ date })}
+            hint="e.g. 24th August, 2026"
+          />
+          <LocalizedInput
+            label="Summary"
+            value={sem.summary}
+            onChange={(summary) => update({ summary })}
+            multiline
+            rows={5}
+            hint="A few lines about the seminar. Long text is shortened with a “more” link on the site."
+          />
+          <div className="grid gap-6 sm:grid-cols-2">
+            <ImageInput
+              label="Image 1 — poster"
+              value={sem.poster}
+              onChange={(poster) => update({ poster })}
+              folder="seminars"
+              aspect="aspect-[3/4]"
+              fit="contain"
+            />
+            <ImageInput
+              label="Image 2 — programme schedule (optional)"
+              value={sem.schedule}
+              onChange={(schedule) => update({ schedule })}
+              folder="seminars"
+              aspect="aspect-[3/4]"
+              fit="contain"
+            />
+          </div>
+        </>
+      )}
+    />
   );
 }

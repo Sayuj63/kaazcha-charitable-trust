@@ -91,6 +91,15 @@ const siteEvent = z.object({
   contacts: z.array(z.object({ name: localized(100), phone: text(40) })).max(10),
 });
 
+const seminar = z.object({
+  id,
+  title: localized(300),
+  date: localized(100),
+  summary: localized(5000),
+  poster: link,
+  schedule: link,
+});
+
 export const SCHEMAS = {
   people: z
     .array(person)
@@ -105,6 +114,7 @@ export const SCHEMAS = {
   magazines: z.array(magazine).max(500),
   articles: z.array(article).max(1000),
   albums: z.array(album).max(200),
+  seminars: z.array(seminar).max(500),
   events: z
     .array(siteEvent)
     .max(200)
